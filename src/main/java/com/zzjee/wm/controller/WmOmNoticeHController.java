@@ -974,7 +974,7 @@ public class WmOmNoticeHController extends BaseController {
 				formDate = "2011-01-01";
 			}
 			yyUtil.getqtck(formDate);//其他出库
-			yyUtil.getsdck(formDate);//销售出库
+			yyUtil.getSdvl(formDate);//销售发货
 			yyUtil.getclck(formDate);//材料出库
 
 		}

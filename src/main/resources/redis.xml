@@ -37,26 +37,40 @@
         <property name="database" value="0" />
     </bean>
 
-	<!-- redis操作模板，面向对象的模板 -->
-	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-    	<property name="connectionFactory" ref="redisConnectionFactory" />
-    	<!-- 将key和value序列化后存入redis，读取时再进行反序列化 -->
+
+    <!-- redis操作模板，面向对象的模板 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisConnectionFactory" />
+        <!-- 将key和value序列化后存入redis，读取时再进行反序列化 -->
         <!-- 对key的默认序列化器 -->
         <property name="keySerializer">
             <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
+            <!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />-->
         </property>
         <!-- 对value的默认序列化器 -->
         <property name="valueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
         </property>
         <!-- 对hash结构数据的hashkey的默认序列化器 -->
         <property name="hashKeySerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
         </property>
         <!-- 对hash结构数据的hashvalue的默认序列化器 -->
         <property name="hashValueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />
         </property>
-  	</bean>
+        <!--        <property name="keySerializer">-->
+        <!--                <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />-->
+        <!--        </property>-->
+        <!--        <property name="valueSerializer">-->
+        <!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />-->
+        <!--        </property>-->
+        <!--        <property name="hashKeySerializer">-->
+        <!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />-->
+        <!--        </property>-->
+        <!--        <property name="hashValueSerializer">-->
+        <!--            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer" />-->
+        <!--        </property> -->
+    </bean>
 
 </beans>
