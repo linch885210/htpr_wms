@@ -184,14 +184,15 @@ public class wmomController {
 		List<WmInQmIEntity>  listwmin = systemService.findHql(Hql,barcode,"N");
 
 		if(listwmin==null){
-			Result.error("不存在的托盘");
-		}
-		if(listwmin!=null&&listwmin.size()>1){
-			Result.error("存在重复的托盘号");
+			return	Result.error("不存在的托盘");
 		}
 		if(listwmin!=null&&listwmin.size()==0){
-			Result.error("不存在的托盘");
+			return	Result.error("不存在的托盘");
 		}
+		if(listwmin!=null&&listwmin.size()>1){
+			return	Result.error("存在重复的托盘号");
+		}
+
 		return Result.success(listwmin.get(0));
 	}
 	@RequestMapping(value = "/toup/{barcode}", method = RequestMethod.GET)
@@ -202,13 +203,13 @@ public class wmomController {
 		List<WmInQmIEntity>  listwmin = systemService.findHql(Hql,barcode,"N");
 
 		if(listwmin==null){
-			Result.error("不存在的托盘");
+			return	Result.error("不存在的托盘");
 		}
 		if(listwmin!=null&&listwmin.size()>1){
-			Result.error("存在重复的托盘号");
+			return	Result.error("存在重复的托盘号");
 		}
 		if(listwmin!=null&&listwmin.size()==0){
-			Result.error("不存在的托盘");
+			return	Result.error("不存在的托盘");
 		}
   		boolean toup = toup(listwmin.get(0).getId());
         if(!toup){
@@ -225,11 +226,11 @@ public class wmomController {
 		List<WmOmQmIEntity>  listwmom = systemService.findHql(Hql,"N");
 
 		if(listwmom==null){
-			Result.error("不存在数据");
+			return	Result.error("不存在数据");
 		}
 
 		if(listwmom!=null&&listwmom.size()==0){
-			Result.error("不存在数据");
+			return	Result.error("不存在数据");
 		}
 		return Result.success(listwmom);
 	}
@@ -242,10 +243,10 @@ public class wmomController {
 		String Hql = "from WmOmQmIEntity where id =  ? and  binSta =  ? ";
 		List<WmOmQmIEntity>  listxiajia = systemService.findHql(Hql,id,"N");
 		if(listxiajia==null){
-			Result.error("不存在下架");
+			return	Result.error("不存在下架");
 		}
 		if(listxiajia!=null&&listxiajia.size()==0){
-			Result.error("不存在下架");
+			return	Result.error("不存在下架");
 		}
 		for(WmOmQmIEntity wmOmQmI: listxiajia){
 			WmToDownGoodsEntity wmToDownGoods = new WmToDownGoodsEntity();
@@ -282,10 +283,10 @@ public class wmomController {
 		String Hql = "from WmToMoveGoodsEntity where moveSta =  ? ";
 		List<WmToMoveGoodsEntity>  listmove = systemService.findHql(Hql,"已确认");
 		if(listmove==null){
-			Result.error("不存在移动");
+			return	Result.error("不存在移动");
 		}
 		if(listmove!=null&&listmove.size()==0){
-			Result.error("不存在移动");
+			return	Result.error("不存在移动");
 		}
 		return Result.success(listmove);
 	}
@@ -296,10 +297,10 @@ public class wmomController {
 		String Hql = "from WmToMoveGoodsEntity where id =  ? and  moveSta =  ? ";
 		List<WmToMoveGoodsEntity>  listmove = systemService.findHql(Hql,id,"已确认");
 		if(listmove==null){
-			Result.error("不存在移动");
+			return	Result.error("不存在移动");
 		}
 		if(listmove!=null&&listmove.size()==0){
-			Result.error("不存在移动");
+			return	Result.error("不存在移动");
 		}
 		for(WmToMoveGoodsEntity t:  listmove){
 			t.setMoveSta("已完成");
