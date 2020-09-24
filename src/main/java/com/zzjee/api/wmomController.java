@@ -189,7 +189,9 @@ public class wmomController {
 		if(listwmin!=null&&listwmin.size()>1){
 			Result.error("存在重复的托盘号");
 		}
-
+		if(listwmin!=null&&listwmin.size()==0){
+			Result.error("不存在的托盘");
+		}
 		return Result.success(listwmin.get(0));
 	}
 	@RequestMapping(value = "/toup/{barcode}", method = RequestMethod.GET)
@@ -205,11 +207,105 @@ public class wmomController {
 		if(listwmin!=null&&listwmin.size()>1){
 			Result.error("存在重复的托盘号");
 		}
+		if(listwmin!=null&&listwmin.size()==0){
+			Result.error("不存在的托盘");
+		}
   		boolean toup = toup(listwmin.get(0).getId());
         if(!toup){
 			Result.error("上架失败");
 		}
 		return Result.success("上架成功");
+	}
+
+	@RequestMapping(value = "/getxiajia", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "获取下架列表", notes = "获取下架列表", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> getxiajia() {
+		String Hql = "from WmOmQmIEntity where   binSta = ?";
+		List<WmOmQmIEntity>  listwmom = systemService.findHql(Hql,"N");
+
+		if(listwmom==null){
+			Result.error("不存在数据");
+		}
+
+		if(listwmom!=null&&listwmom.size()==0){
+			Result.error("不存在数据");
+		}
+		return Result.success(listwmom);
+	}
+
+
+	@RequestMapping(value = "/setxiajia/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "设置下架", notes = "设置下架", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> setxiajia(@ApiParam(required = true, name = "id", value = "id") @PathVariable("id") String id) {
+		String Hql = "from WmOmQmIEntity where id =  ? and  binSta =  ? ";
+		List<WmOmQmIEntity>  listxiajia = systemService.findHql(Hql,id,"N");
+		if(listxiajia==null){
+			Result.error("不存在下架");
+		}
+		if(listxiajia!=null&&listxiajia.size()==0){
+			Result.error("不存在下架");
+		}
+		for(WmOmQmIEntity wmOmQmI: listxiajia){
+			WmToDownGoodsEntity wmToDownGoods = new WmToDownGoodsEntity();
+			wmToDownGoods.setBinIdFrom(wmOmQmI.getTinId());//下架托盘
+			wmToDownGoods.setKuWeiBianMa(wmOmQmI.getBinId());//储位
+			wmToDownGoods.setBinIdTo(wmOmQmI.getOmNoticeId());//到托盘
+			wmToDownGoods.setCusCode(wmOmQmI.getCusCode());//货主
+			wmToDownGoods.setGoodsId(wmOmQmI.getGoodsId());//
+			wmToDownGoods.setGoodsProData(wmOmQmI.getProData());//生产日期
+			wmToDownGoods.setOrderId(wmOmQmI.getOmNoticeId());//出货通知单
+			wmToDownGoods.setOrderIdI(wmOmQmI.getId());//出货通知项目
+			wmToDownGoods.setBaseUnit(wmOmQmI.getBaseUnit());//基本单位
+			wmToDownGoods.setBaseGoodscount(wmOmQmI.getBaseGoodscount());//基本单位数量
+			wmToDownGoods.setGoodsUnit(wmOmQmI.getGoodsUnit());//出货单位
+			wmToDownGoods.setGoodsQua(wmOmQmI.getQmOkQuat());//出货数量
+			wmToDownGoods.setGoodsQuaok(wmOmQmI.getQmOkQuat());//出货数量
+			wmToDownGoods.setGoodsName(wmOmQmI.getGoodsName());//商品名称
+			wmToDownGoods.setOmBeizhu(wmOmQmI.getOmBeizhu());//备注
+			wmToDownGoods.setImCusCode(wmOmQmI.getImCusCode());//客户单号
+			wmToDownGoods.setOrderType("01");//默认为01
+			systemService.save(wmToDownGoods);
+			wmOmQmI.setBinSta("Y");
+			systemService.saveOrUpdate(wmOmQmI);
+		}
+		return Result.success("下架成功");
+	}
+
+
+
+	@RequestMapping(value = "/getmove", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "获取移动列表", notes = "获取移动列表", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> getmove() {
+		String Hql = "from WmToMoveGoodsEntity where moveSta =  ? ";
+		List<WmToMoveGoodsEntity>  listmove = systemService.findHql(Hql,"已确认");
+		if(listmove==null){
+			Result.error("不存在移动");
+		}
+		if(listmove!=null&&listmove.size()==0){
+			Result.error("不存在移动");
+		}
+		return Result.success(listmove);
+	}
+	@RequestMapping(value = "/setmove/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "设置移动", notes = "设置移动", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> setmove(@ApiParam(required = true, name = "id", value = "id") @PathVariable("id") String id) {
+		String Hql = "from WmToMoveGoodsEntity where id =  ? and  moveSta =  ? ";
+		List<WmToMoveGoodsEntity>  listmove = systemService.findHql(Hql,id,"已确认");
+		if(listmove==null){
+			Result.error("不存在移动");
+		}
+		if(listmove!=null&&listmove.size()==0){
+			Result.error("不存在移动");
+		}
+		for(WmToMoveGoodsEntity t:  listmove){
+			t.setMoveSta("已完成");
+			systemService.updateEntitie(t);
+		}
+		return Result.success("移动成功");
 	}
 
 	private boolean toup(String id ){
