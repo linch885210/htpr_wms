@@ -10,9 +10,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.zzjee.md.entity.MvGoodsEntity;
 import com.zzjee.rfid.entity.RfidBuseEntity;
 import com.zzjee.wave.entity.WaveToDownEntity;
 import com.zzjee.wave.entity.WaveToFjEntity;
+import com.zzjee.wm.entity.*;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.common.hibernate.qbc.CriteriaQuery;
 import org.jeecgframework.core.util.ExceptionUtil;
@@ -34,10 +36,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.zzjee.wm.entity.WmNoticeConfEntity;
-import com.zzjee.wm.entity.WmOmNoticeHEntity;
-import com.zzjee.wm.entity.WmOmNoticeIEntity;
-import com.zzjee.wm.entity.WmToDownGoodsEntity;
 import com.zzjee.wm.page.WmOmNoticeHPage;
 import com.zzjee.wmutil.wmUtil;
 
@@ -177,6 +175,122 @@ public class wmomController {
 		return Result.success(page);
 	}
 
+
+	@RequestMapping(value = "/getbin/{barcode}", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "根据barcode获取上架储位息", notes = "根据barcode获取上架储位息", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> getshangjiachuawei(@ApiParam(required = true, name = "barcode", value = "barcode") @PathVariable("barcode") String barcode) {
+		String Hql = "from WmInQmIEntity where tinId =  ?  and binSta = ?";
+		List<WmInQmIEntity>  listwmin = systemService.findHql(Hql,barcode,"N");
+
+		if(listwmin==null){
+			Result.error("不存在的托盘");
+		}
+		if(listwmin!=null&&listwmin.size()>1){
+			Result.error("存在重复的托盘号");
+		}
+
+		return Result.success(listwmin.get(0));
+	}
+	@RequestMapping(value = "/toup/{barcode}", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "根据barcode获取上架储位息", notes = "根据barcode获取上架储位息", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> toupapi(@ApiParam(required = true, name = "barcode", value = "barcode") @PathVariable("barcode") String barcode) {
+		String Hql = "from WmInQmIEntity where tinId =  ?  and binSta = ?";
+		List<WmInQmIEntity>  listwmin = systemService.findHql(Hql,barcode,"N");
+
+		if(listwmin==null){
+			Result.error("不存在的托盘");
+		}
+		if(listwmin!=null&&listwmin.size()>1){
+			Result.error("存在重复的托盘号");
+		}
+  		boolean toup = toup(listwmin.get(0).getId());
+        if(!toup){
+			Result.error("上架失败");
+		}
+		return Result.success("上架成功");
+	}
+
+	private boolean toup(String id ){
+//		List<WmToUpGoodsEntity> wmToUpGoodsList = new ArrayList<WmToUpGoodsEntity>();
+		String hql0 = "from WmInQmIEntity where binSta = 'N' and  id = ?";
+		List<WmInQmIEntity> WmInQmIEntityList = systemService.findHql(hql0,
+				id);// 获取行项目
+		for (WmInQmIEntity wmInQmIEntity : WmInQmIEntityList) {
+
+			try{
+				WmToUpGoodsEntity wmToUpGoodsEntityold = systemService.findUniqueByProperty(WmToUpGoodsEntity.class,"orderIdI",wmInQmIEntity.getId());
+				if (wmToUpGoodsEntityold!=null){
+					continue;
+				}
+			}catch (Exception e){
+
+			}
+
+			WmToUpGoodsEntity wmToUpGoodsEntity = new WmToUpGoodsEntity();
+			wmToUpGoodsEntity.setGoodsId(wmInQmIEntity.getGoodsId());
+			wmToUpGoodsEntity.setGoodsProData(wmInQmIEntity.getProData());
+			wmToUpGoodsEntity.setGoodsBatch(wmInQmIEntity.getGoodsBatch());
+			wmToUpGoodsEntity.setGoodsQua(wmInQmIEntity.getQmOkQuat());
+			wmToUpGoodsEntity.setGoodsUnit(wmInQmIEntity.getGoodsUnit());
+			wmToUpGoodsEntity.setOrderIdI(wmInQmIEntity.getId());
+			wmToUpGoodsEntity.setOrderId(wmInQmIEntity.getImNoticeId());
+			wmToUpGoodsEntity.setBinId(wmInQmIEntity.getTinId());
+			wmToUpGoodsEntity.setKuWeiBianMa(wmInQmIEntity.getBinId());
+			wmToUpGoodsEntity.setCusCode(wmInQmIEntity.getCusCode());
+			wmToUpGoodsEntity.setGoodsName(wmInQmIEntity.getGoodsName());
+			wmToUpGoodsEntity.setActTypeCode("01");
+			wmToUpGoodsEntity.setWmToUpId(wmInQmIEntity.getId());
+//			String sql = "select     md.suo_shu_ke_hu as cuscode from    md_bin md  where    md.ku_wei_bian_ma = '"
+//					+ wmInQmIEntity.getBinId() + "'";
+//			Map<String, Object> binMap = systemService.findOneForJdbc(sql);
+			if (!wmUtil.checkbin(wmInQmIEntity.getBinId())) {
+				return false;
+			}
+
+			try {
+
+//				MvGoodsEntity mvgoods = new MvGoodsEntity();
+				MvGoodsEntity mvgoods = systemService.findUniqueByProperty(
+						MvGoodsEntity.class, "goodsCode",
+						wmToUpGoodsEntity.getGoodsId());
+				wmToUpGoodsEntity.setBaseUnit(mvgoods.getBaseunit());
+				wmToUpGoodsEntity.setGoodsUnit(mvgoods.getShlDanWei());
+
+				if (!mvgoods.getBaseunit().equals(mvgoods.getShlDanWei())) {
+					try {
+						wmToUpGoodsEntity.setBaseGoodscount(String.valueOf(
+								Double.parseDouble(mvgoods.getChlShl())
+										* Double.parseDouble(wmToUpGoodsEntity.getGoodsQua())));
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+				} else {
+					wmToUpGoodsEntity.setBaseGoodscount(wmToUpGoodsEntity
+							.getGoodsQua());
+				}
+
+
+			} catch (Exception e) {
+
+			}
+
+
+			wmInQmIEntity.setBinSta("Y");
+			systemService.saveOrUpdate(wmInQmIEntity);
+			//重复增加二次判断
+			List<WmToUpGoodsEntity> listall = systemService.findByProperty(WmToUpGoodsEntity.class,"orderIdI",wmToUpGoodsEntity.getOrderIdI());
+			if(listall!=null&&listall.size()>0){
+				return true;
+			}
+			//重复增加二次判断
+
+			systemService.save(wmToUpGoodsEntity);
+		}
+		return true;
+	}
 	@RequestMapping(value = "/goodsdownlist/{orderNo}", method = RequestMethod.GET)
 	@ResponseBody
 	@ApiOperation(value = "订单出库商品信息", produces = "application/json", httpMethod = "GET")
