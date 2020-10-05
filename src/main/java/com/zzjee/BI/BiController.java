@@ -9,8 +9,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.zzjee.wmutil.wmUtil;
 import org.jeecgframework.core.common.controller.BaseController;
 import org.jeecgframework.core.common.model.json.Highchart;
+import org.jeecgframework.core.util.StringUtil;
 import org.jeecgframework.web.system.service.SystemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +37,12 @@ public class BiController extends BaseController {
 //        String yearstr = DateUtils.date2Str(DateUtils.yyyyMMdd);
 
         String ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_im_notice_i where bin_pre = 'N'" ;
-
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_im_notice_i i ,wm_im_notice_h h where bin_pre = 'N' " +
+                    " and h.notice_id = i.im_notice_id and h.cus_code = '" +cusCode+
+                    "' " ;
+         }
         List<Map<String,Object>> ymaplist1=systemService.findForJdbc(ysql);
         for (Map<String,Object> object : ymaplist1) {
             Map<String, Object> obj = object;
@@ -48,6 +55,11 @@ public class BiController extends BaseController {
         }
         ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_in_qm_i where bin_sta = 'N'" ;
 
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_in_qm_i where bin_sta = 'N' and cus_code = '" +cusCode+
+                    "' " ;
+        }
         List<Map<String,Object>> ymaplist2=systemService.findForJdbc(ysql);
         for (Map<String,Object> object : ymaplist2) {
             Map<String, Object> obj = object;
@@ -59,7 +71,11 @@ public class BiController extends BaseController {
             }
         }
         ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_om_qm_i where bin_sta = 'I'" ;
-
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_om_qm_i where bin_sta = 'I' and cus_code = '" +cusCode+
+                    "' " ;
+        }
         List<Map<String,Object>> ymaplist3=systemService.findForJdbc(ysql);
         for (Map<String,Object> object : ymaplist3) {
             Map<String, Object> obj = object;
@@ -72,6 +88,11 @@ public class BiController extends BaseController {
         }
         ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_om_qm_i where bin_sta = 'N'" ;
 
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_om_qm_i where bin_sta = 'N' and cus_code = '" +cusCode+
+                    "' " ;
+        }
         List<Map<String,Object>> ymaplist4=systemService.findForJdbc(ysql);
         for (Map<String,Object> object : ymaplist4) {
             Map<String, Object> obj = object;
@@ -84,7 +105,11 @@ public class BiController extends BaseController {
         }
 
         ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_to_move_goods where move_Sta = '计划中'" ;
-
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            ysql = "select CONVERT( sum(base_goodscount),DECIMAL(10,0)) as linecount from wm_to_move_goods where move_Sta = '计划中' and cus_code = '" +cusCode+
+                    "' " ;
+        }
         List<Map<String,Object>> ymaplist5=systemService.findForJdbc(ysql);
         for (Map<String,Object> object : ymaplist5) {
             Map<String, Object> obj = object;
@@ -114,8 +139,7 @@ public class BiController extends BaseController {
     public List<Highchart> dayCountmonth(HttpServletRequest request, String reportType, HttpServletResponse response) {
         List<Highchart> list = new ArrayList<Highchart>();
         Highchart hc = new Highchart();
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from ( " +
+        String sql = "select * from ( " +
                 "SELECT  " +
                 "    DATE_FORMAT(create_date, '%Y-%m-%d') as create_date, " +
                 "    floor(sum(BASE_GOODSCOUNT)) as amount " +
@@ -123,9 +147,23 @@ public class BiController extends BaseController {
                 "    wm_to_down_goods where ORDER_ID <> 'ZY'   " +
                 "group by DATE_FORMAT(create_date, '%Y-%m-%d') " +
                 "order by DATE_FORMAT(create_date, '%Y-%m-%d') desc " +
-                "limit 7)  temptable order by create_date  ");
+                "limit 7)  temptable order by create_date  ";
 //		List userBroswerList = systemService.(sb.toString());
-        List<Map<String,Object>> maplist=systemService.findForJdbc(sb.toString());
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            sql = "select * from ( " +
+                    "SELECT  " +
+                    "    DATE_FORMAT(create_date, '%Y-%m-%d') as create_date, " +
+                    "    floor(sum(BASE_GOODSCOUNT)) as amount " +
+                    "FROM" +
+                    "    wm_to_down_goods where ORDER_ID <> 'ZY'  and cus_code = '" +cusCode+
+                    "'  " +
+                    "group by DATE_FORMAT(create_date, '%Y-%m-%d') " +
+                    "order by DATE_FORMAT(create_date, '%Y-%m-%d') desc " +
+                    "limit 7)  temptable order by create_date  ";
+        }
+
+        List<Map<String,Object>> maplist=systemService.findForJdbc(sql);
 //        StringBuffer sbconut = new StringBuffer();
 //        sbconut.append("SELECT  floor(sum(or_Amount)) as amount  FROM T_Kp_Order_One  where cus_name is not null    ");
 //
@@ -175,17 +213,31 @@ public class BiController extends BaseController {
     public List<Highchart> studentCountmonth(HttpServletRequest request, String reportType, HttpServletResponse response) {
         List<Highchart> list = new ArrayList<Highchart>();
         Highchart hc = new Highchart();
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from ( " +
+       String sql = "select * from ( " +
                 "SELECT  " +
                 "    GOODS_name as goodsid, " +
                 "    floor(sum(BASE_GOODSCOUNT)) as amount " +
                 "FROM" +
                 "    wm_to_up_goods where ORDER_ID <> 'ZY'   " +
                 "group by GOODS_ID   " +
-                ")  temptable  order by amount desc limit 6  ");
+                ")  temptable  order by amount desc limit 6  ";
 //		List userBroswerList = systemService.(sb.toString());
-        List<Map<String,Object>> maplist=systemService.findForJdbc(sb.toString());
+
+
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            sql = "select * from ( " +
+                    "SELECT  " +
+                    "    GOODS_name as goodsid, " +
+                    "    floor(sum(BASE_GOODSCOUNT)) as amount " +
+                    "FROM" +
+                    "    wm_to_up_goods where ORDER_ID <> 'ZY'  and cus_code = '" +cusCode+
+                    "' " +
+                    "group by GOODS_ID   " +
+                    ")  temptable  order by amount desc limit 6  ";
+        }
+
+        List<Map<String,Object>> maplist=systemService.findForJdbc(sql);
 //        StringBuffer sbconut = new StringBuffer();
 //        sbconut.append("SELECT  floor(sum(or_Amount)) as amount  FROM T_Kp_Order_One  where cus_name is not null    ");
 //
@@ -234,17 +286,31 @@ public class BiController extends BaseController {
     public List<Highchart> studentCount(HttpServletRequest request, String reportType, HttpServletResponse response) {
         List<Highchart> list = new ArrayList<Highchart>();
         Highchart hc = new Highchart();
-        StringBuffer sb = new StringBuffer();
-        sb.append("select * from ( " +
+        String sql = "select * from ( " +
                 "SELECT  " +
                 "    GOODS_name as goodsid, " +
                 "    floor(sum(BASE_GOODSCOUNT)) as amount " +
                 "FROM" +
                 "    wm_to_down_goods where ORDER_ID <> 'ZY'   " +
                 "group by GOODS_ID   " +
-                ")  temptable   order by amount desc limit 6 ");
+                ")  temptable   order by amount desc limit 6 " ;
+
+        if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+            String cusCode = wmUtil.getCusCode();
+            sql = "select * from ( " +
+                    "SELECT  " +
+                    "    GOODS_name as goodsid, " +
+                    "    floor(sum(BASE_GOODSCOUNT)) as amount " +
+                    "FROM" +
+                    "    wm_to_down_goods where ORDER_ID <> 'ZY'  and cus_code = '" +cusCode+
+                    "'  " +
+                    "group by GOODS_ID   " +
+                    ")  temptable   order by amount desc limit 6 " ;
+
+        }
+
 //		List userBroswerList = systemService.(sb.toString());
-        List<Map<String,Object>> maplist=systemService.findForJdbc(sb.toString());
+        List<Map<String,Object>> maplist=systemService.findForJdbc(sql);
 //        StringBuffer sbconut = new StringBuffer();
 //        sbconut.append("SELECT  floor(sum(or_Amount)) as amount  FROM T_Kp_Order_One  where cus_name is not null    ");
 //
