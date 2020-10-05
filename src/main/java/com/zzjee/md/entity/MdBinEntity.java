@@ -9,12 +9,12 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
-/**   
+/**
  * @Title: Entity
  * @Description: 仓位定义
  * @author erzhongxmu
  * @date 2017-08-15 23:17:02
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Entity
@@ -65,10 +65,16 @@ public class MdBinEntity implements java.io.Serializable {
 	@Excel(name="所属客户")
 	private java.lang.String suoShuKeHu;
 	/**体积单位*/
+	@Excel(name="最小批量")
+
 	private java.lang.String tiJiDanWei;
 	/**重量单位*/
+	@Excel(name="最大批量")
+
 	private java.lang.String zhongLiangDanWei;
 	/**面积单位*/
+	@Excel(name="出库口")
+
 	private java.lang.String mianJiDanWei;
 	/**最大体积*/
 	@Excel(name="最大体积")
@@ -337,7 +343,7 @@ public class MdBinEntity implements java.io.Serializable {
 	public void setKuWeiShuXing(java.lang.String kuWeiShuXing){
 		this.kuWeiShuXing = kuWeiShuXing;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  产品属性
@@ -354,7 +360,7 @@ public class MdBinEntity implements java.io.Serializable {
 	public void setChpShuXing(java.lang.String chpShuXing){
 		this.chpShuXing = chpShuXing;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  上架次序
@@ -619,7 +625,7 @@ public class MdBinEntity implements java.io.Serializable {
 	public void setMingXi2(java.lang.String mingXi2){
 		this.mingXi2 = mingXi2;
 	}
-	
+
 	@Column(name ="MING_XI3",nullable=true,length=32)
 	public java.lang.String getMingXi3(){
 		return this.mingXi3;
@@ -632,7 +638,7 @@ public class MdBinEntity implements java.io.Serializable {
 	public void setMingXi3(java.lang.String mingXi3){
 		this.mingXi3 = mingXi3;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  仓库

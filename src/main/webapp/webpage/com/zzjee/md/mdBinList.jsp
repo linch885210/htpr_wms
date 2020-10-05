@@ -16,17 +16,19 @@
     <t:dgCol title="库存地点"  field="kuWeiMingCheng"    queryMode="group"  width="120"></t:dgCol>
     <t:dgCol title="仓库"  field="binStore" query="true"   queryMode="single" dictionary="ba_store,store_code,store_name"  width="90"></t:dgCol>
     <t:dgCol title="库位编码"  field="kuWeiBianMa"   query="true" queryMode="single"  width="120"></t:dgCol>
-    <t:dgCol title="库位条码"  field="kuWeiTiaoMa"   query="true" queryMode="single"  width="120"></t:dgCol>   
+    <t:dgCol title="库位条码"  field="kuWeiTiaoMa"   query="true" queryMode="single"  width="120"></t:dgCol>
     <t:dgCol title="库位类型"  field="kuWeiLeiXing"   query="true" queryMode="single" dictionary="ba_bin_type,bin_type_code,bin_type_name"  width="80"></t:dgCol>
     <t:dgCol title="库位属性"  field="kuWeiShuXing"    queryMode="group" dictionary="ba_deg_type,deg_type_code,deg_type_name"  width="80"></t:dgCol>
     <t:dgCol title="产品属性"  field="chpShuXing"  queryMode="single" dictionary="ba_goods_type,goods_type_code,goods_type_name"   width="120"></t:dgCol>
-   
+
     <t:dgCol title="上架次序"  field="shangJiaCiXu"    queryMode="group"  width="80"></t:dgCol>
     <t:dgCol title="取货次序"  field="quHuoCiXu"    queryMode="group"  width="80"></t:dgCol>
     <t:dgCol title="所属客户"  field="suoShuKeHu"    queryMode="group" dictionary="mv_cus,cus_code,cus_name"  width="120"></t:dgCol>
-    <t:dgCol title="体积单位"  field="tiJiDanWei"  hidden="true"  queryMode="group" dictionary="ba_unit,unit_code,unit_zh_name"  width="70"></t:dgCol>
-    <t:dgCol title="重量单位"  field="zhongLiangDanWei"  hidden="true"  queryMode="group" dictionary="ba_unit,unit_code,unit_zh_name"  width="70"></t:dgCol>
-    <t:dgCol title="面积单位"  field="mianJiDanWei"  hidden="true"  queryMode="group" dictionary="ba_unit,unit_code,unit_zh_name"  width="70"></t:dgCol>
+
+      <t:dgCol title="最小批量"  field="tiJiDanWei"     queryMode="group"    width="70"></t:dgCol>
+    <t:dgCol title="最大批量"  field="zhongLiangDanWei"    queryMode="group"    width="70"></t:dgCol>
+    <t:dgCol title="出库口"  field="mianJiDanWei"     queryMode="group"    width="70"></t:dgCol>
+
     <t:dgCol title="最大体积"  field="zuiDaTiJi"  style="text-align:right" queryMode="group"  width="70"></t:dgCol>
     <t:dgCol title="最大重量"  field="zuiDaZhongLiang"  style="text-align:right"  queryMode="group"  width="70"></t:dgCol>
     <t:dgCol title="最大面积"  field="zuiDaMianJi"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
@@ -54,13 +56,13 @@
   </t:datagrid>
   </div>
  </div>
- <script src = "webpage/com/zzjee/md/mdBinList.js"></script>		
+ <script src = "webpage/com/zzjee/md/mdBinList.js"></script>
  <script type="text/javascript">
  $(document).ready(function(){
  });
- 
-   
- 
+
+
+
 //导入
 function ImportXls() {
 	openuploadwin('Excel导入', 'mdBinController.do?upload', "mdBinList");
