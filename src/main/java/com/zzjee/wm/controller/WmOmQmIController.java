@@ -69,12 +69,12 @@ import java.net.URI;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
-/**   
- * @Title: Controller  
+/**
+ * @Title: Controller
  * @Description: 下架任务
  * @author erzhongxmu
  * @date 2017-09-11 14:57:43
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Controller
@@ -91,12 +91,12 @@ public class WmOmQmIController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
-	
+
 
 
 	/**
 	 * 下架任务列表 页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "list")
@@ -113,7 +113,7 @@ public class WmOmQmIController extends BaseController {
 	}
 	/**
 	 * easyui AJAX请求数据
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param dataGrid
@@ -129,11 +129,14 @@ public class WmOmQmIController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		Map<String,Object> map1 = new HashMap<String,Object>();  
-		map1.put("createDate", "desc");  
-		cq.setOrder(map1); 
+		Map<String,Object> map1 = new HashMap<String,Object>();
+		map1.put("createDate", "desc");
+		cq.setOrder(map1);
 		if(wmOmQmI.getBinSta()==null){
-			cq.eq("binSta", "N");	
+			cq.eq("binSta", "N");
+		}
+		if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+			cq.eq("cusCode", wmUtil.getCusCode());
 		}
 		cq.add();
 		this.wmOmQmIService.getDataGridReturn(cq, true);
@@ -149,10 +152,13 @@ public class WmOmQmIController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		Map<String,Object> map1 = new HashMap<String,Object>();  
-		map1.put("createDate", "desc");  
-		cq.setOrder(map1); 
-		cq.eq("binSta", "I");	
+		Map<String,Object> map1 = new HashMap<String,Object>();
+		map1.put("createDate", "desc");
+		cq.setOrder(map1);
+		cq.eq("binSta", "I");
+		if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+			cq.eq("cusCode", wmUtil.getCusCode());
+		}
 		cq.add();
 		this.wmOmQmIService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
@@ -183,7 +189,7 @@ public class WmOmQmIController extends BaseController {
 		return j;
 	}
 
-	
+
 	@RequestMapping(params = "doassign")
 	@ResponseBody
 	public AjaxJson doassign(WmOmQmIEntity wmOmQmI, HttpServletRequest request) {
@@ -208,7 +214,7 @@ public class WmOmQmIController extends BaseController {
 				throw new BusinessException(e.getMessage());
 			}
 		}
-	
+
 		j.setMsg(message);
 		return j;
 	}
@@ -322,12 +328,12 @@ public class WmOmQmIController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * 删除下架任务
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
@@ -348,9 +354,9 @@ public class WmOmQmIController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(params = "dotodown")
 	@ResponseBody
 	public AjaxJson dotodown(HttpServletRequest request) {
@@ -403,7 +409,7 @@ public class WmOmQmIController extends BaseController {
 
 	/**
 	 * 批量删除下架任务
-	 * 
+	 *
 	 * @return
 	 */
 	 @RequestMapping(params = "doBatchDel")
@@ -414,7 +420,7 @@ public class WmOmQmIController extends BaseController {
 		message = "下架任务删除成功";
 		try{
 			for(String id:ids.split(",")){
-				WmOmQmIEntity wmOmQmI = systemService.getEntity(WmOmQmIEntity.class, 
+				WmOmQmIEntity wmOmQmI = systemService.getEntity(WmOmQmIEntity.class,
 				id
 				);
 				wmOmQmIService.delete(wmOmQmI);
@@ -432,7 +438,7 @@ public class WmOmQmIController extends BaseController {
 
 	/**
 	 * 添加下架任务
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doAdd")
@@ -490,7 +496,7 @@ public class WmOmQmIController extends BaseController {
 
 	/**
 	 * 更新下架任务
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doUpdate")
@@ -549,7 +555,7 @@ public class WmOmQmIController extends BaseController {
 
 	/**
 	 * 下架任务新增页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
@@ -562,7 +568,7 @@ public class WmOmQmIController extends BaseController {
 	}
 	/**
 	 * 下架任务编辑页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
@@ -573,10 +579,10 @@ public class WmOmQmIController extends BaseController {
 		}
 		return new ModelAndView("com/zzjee/wm/wmOmQmI-update");
 	}
-	
+
 	/**
 	 * 导入功能跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "upload")
@@ -584,10 +590,10 @@ public class WmOmQmIController extends BaseController {
 		req.setAttribute("controller_name","wmOmQmIController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
-	
+
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -606,7 +612,7 @@ public class WmOmQmIController extends BaseController {
 	}
 	/**
 	 * 导出excel 使模板
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -620,13 +626,13 @@ public class WmOmQmIController extends BaseController {
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxJson importExcel(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
-		
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -654,14 +660,14 @@ public class WmOmQmIController extends BaseController {
 		}
 		return j;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public List<WmOmQmIEntity> list() {
 		List<WmOmQmIEntity> listWmOmQmIs=wmOmQmIService.getList(WmOmQmIEntity.class);
 		return listWmOmQmIs;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
