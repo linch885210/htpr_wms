@@ -27,11 +27,12 @@
 
       <t:dgCol title="最小批量"  field="tiJiDanWei"     queryMode="group"    width="70"></t:dgCol>
     <t:dgCol title="最大批量"  field="zhongLiangDanWei"    queryMode="group"    width="70"></t:dgCol>
-    <t:dgCol title="出库口"  field="mianJiDanWei"     queryMode="group"    width="70"></t:dgCol>
+      <t:dgCol title="储位组别"  field="zuiDaMianJi"    queryMode="group"  width="120"></t:dgCol>
+
+      <t:dgCol title="出库口"  field="mianJiDanWei"     queryMode="group"    width="70"></t:dgCol>
 
     <t:dgCol title="最大体积"  field="zuiDaTiJi"  style="text-align:right" queryMode="group"  width="70"></t:dgCol>
     <t:dgCol title="最大重量"  field="zuiDaZhongLiang"  style="text-align:right"  queryMode="group"  width="70"></t:dgCol>
-    <t:dgCol title="最大面积"  field="zuiDaMianJi"  hidden="true"  queryMode="group"  width="120"></t:dgCol>
     <t:dgCol title="最大托盘"  field="zuiDaTuoPan"    queryMode="group"  width="120"></t:dgCol>
     <t:dgCol title="长度"  field="chang"   queryMode="group"  width="120"></t:dgCol>
     <t:dgCol title="宽度"  field="kuan"    queryMode="group"  width="120"></t:dgCol>

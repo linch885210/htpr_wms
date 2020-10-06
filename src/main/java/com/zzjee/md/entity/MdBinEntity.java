@@ -65,6 +65,9 @@ public class MdBinEntity implements java.io.Serializable {
 	@Excel(name="所属客户")
 	private java.lang.String suoShuKeHu;
 	/**体积单位*/
+	/**最大面积*/
+	@Excel(name="储位组别")
+	private java.lang.String zuiDaMianJi;
 	@Excel(name="最小批量")
 
 	private java.lang.String tiJiDanWei;
@@ -82,8 +85,7 @@ public class MdBinEntity implements java.io.Serializable {
 	/**最大重量*/
 	@Excel(name="最大重量")
 	private java.lang.String zuiDaZhongLiang;
-	/**最大面积*/
-	private java.lang.String zuiDaMianJi;
+
 	/**最大托盘*/
 	@Excel(name="最大托盘")
 	private java.lang.String zuiDaTuoPan;

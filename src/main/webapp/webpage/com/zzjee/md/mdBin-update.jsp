@@ -343,7 +343,17 @@
 							  <span class="Validform_checktip" style="float:left;height:0px;"></span>
 							  <label class="Validform_label" style="display: none">出库口</label>
 						  </div>
+						  <div class="col-xs-3 text-center">
+							  <b>储位组别</b>
+						  </div>
 
+						  <div class="col-xs-3">
+							  <input id="zuiDaMianJi" name="zuiDaMianJi" type="text" class="form-control"
+									 ignore="ignore" style="text-align:right"
+									 value='${mdBinPage.zuiDaMianJi}' />
+							  <span class="Validform_checktip" style="float:left;height:0px;"></span>
+							  <label class="Validform_label" style="display: none">储位组别</label>
+						  </div>
 					  </div>
 
 

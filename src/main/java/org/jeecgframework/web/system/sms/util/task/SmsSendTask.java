@@ -100,8 +100,29 @@ public class SmsSendTask {
 						} catch (Exception e) {
 							zuidatiji = "1";
 						}
+						String  binplantuopan = "0";
+						try{
+							WmImNoticeIEntity wmImNoticeIEntity = systemService.get(WmImNoticeIEntity.class,wmInQmIEntity.getImNoticeItem()) ;
+							binplantuopan =  wmImNoticeIEntity.getBinPlan() ;
+						}catch (Exception e){
 
-						sql = "select  binid     from          wv_avabin      where  ku_wei_lei_xing <> '不良品区'  and   zui_da_ti_ji >"
+						}
+
+						String hqllastbin = "from WmInQmIEntity t where t.binSta=? and (t.binId is not null or t.binId <>  '' )  and imNoticeItem = ?  order by updateDate desc ";
+
+						List<WmInQmIEntity> WmInQmbinlist = systemService.findHql(hql, new Object[] { "Y" },wmInQmIEntity.getImNoticeItem());
+
+						String lastbin = ""; //本单上一个储位
+						String lastbinfenzu = "";   //本单上一个储位分组
+						if(WmInQmbinlist!=null&&WmInQmbinlist.size()>0){
+							lastbin = WmInQmbinlist.get(0).getBinId();
+							List<MdBinEntity> mdblist =	systemService.findByProperty(MdBinEntity.class, "kuWeiBianMa", lastbin);
+                            if(mdblist!=null&&mdblist.size()>0){
+								lastbinfenzu = mdblist.get(0).getZuiDaMianJi();
+							}
+						}
+						sql = "select  binid     from          wv_avabin      where   ku_wei_lei_xing <> '不良品区'  and zui_da_mian_ji = '" +lastbinfenzu+
+								"'   and   zui_da_ti_ji >"
 								+ zuidatiji
 								+ "  and ku_wei_shu_xing = (select cf_wen_ceng from mv_goods  where goods_code =  '"
 								+ wmInQmIEntity.getGoodsId()
@@ -113,13 +134,42 @@ public class SmsSendTask {
 								+ wmInQmIEntity.getCusCode()
 								+ "') "
 								+ "order by suo_shu_ke_hu desc,  shang_jia_ci_xu,binid     limit 1";
+						org.jeecgframework.core.util.LogUtil
+								.info("===================sql1==================="+sql);
+
 						binMap = systemService.findOneForJdbc(sql);
+						if (binMap != null) {
+							wmInQmIEntity.setBinId(binMap.get("binid").toString());
+							systemService.updateEntitie(wmInQmIEntity);
+						}else{
+
+							sql = "select  binid     from          wv_avabin      where   ku_wei_lei_xing <> '不良品区' and  ti_ji_dan_wei <= " +binplantuopan+
+									"   and zhong_liang_dan_wei >= " +binplantuopan+
+									"    and   zui_da_ti_ji >"
+									+ zuidatiji
+									+ "  and ku_wei_shu_xing = (select cf_wen_ceng from mv_goods  where goods_code =  '"
+									+ wmInQmIEntity.getGoodsId()
+									+ "')"
+									+ "  and  locate( (select chp_shu_xing from mv_goods  where goods_code =  '"
+									+ wmInQmIEntity.getGoodsId()
+									+ "') ,chp_shu_xing ) <> 0 "
+									+ " and (suo_shu_ke_hu = '' or suo_shu_ke_hu = '"
+									+ wmInQmIEntity.getCusCode()
+									+ "') "
+									+ "order by suo_shu_ke_hu desc,  shang_jia_ci_xu,binid     limit 1";
+							org.jeecgframework.core.util.LogUtil
+									.info("===================sql2==================="+sql);
+							binMap = systemService.findOneForJdbc(sql);
+
+							if (binMap != null) {
+								wmInQmIEntity.setBinId(binMap.get("binid").toString());
+								systemService.updateEntitie(wmInQmIEntity);
+							}
+
+						}
 					}
 
-					if (binMap != null) {
-						wmInQmIEntity.setBinId(binMap.get("binid").toString());
-						systemService.updateEntitie(wmInQmIEntity);
-					}
+
 				}
 			}
 			//更新基本数量和单位
