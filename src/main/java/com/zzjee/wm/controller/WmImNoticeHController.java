@@ -2274,6 +2274,16 @@ Double sum =0.00;
 				try {
 				    MvGoodsEntity mvgoods = systemService.findUniqueByProperty(MvGoodsEntity.class,"goodsName",wmImNoticeIEntity.getGoodsCode());
 //					String date[]=wmImNoticeIEntity.getGoodsCode().split("-");
+
+					long hiti = 0;
+					try {
+						if(StringUtil.isEmpty(wmImNoticeIEntity.getBinPlan())){
+							hiti = Long.parseLong(wmImNoticeIEntity.getGoodsCount())/  Long.parseLong(mvgoods.getMpCengGao()) * Long.parseLong(mvgoods.getMpDanCeng()) * Long.parseLong(mvgoods.getChlShl());
+							wmImNoticeIEntity.setBinPlan(Long.toString(hiti));
+						}
+					} catch (Exception e) {
+					}
+
 					wmImNoticeIEntity.setGoodsCode(mvgoods.getGoodsCode());
 					wmImNoticeIEntity.setGoodsName(mvgoods.getShpMingCheng());
 				} catch (Exception e) {
