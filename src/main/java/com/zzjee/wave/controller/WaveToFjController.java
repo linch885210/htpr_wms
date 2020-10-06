@@ -410,6 +410,7 @@ public class WaveToFjController extends BaseController {
 					WmOmQmIEntity.class, waveToFj.getId());
 			if (wmOmQmI != null&&wmOmQmI.getBinSta().equals("H")) {
 				wmOmQmI.setBinSta("Y");
+				wmOmQmI.setSecondRq(waveToFj.getSecondRq());
 				systemService.saveOrUpdate(wmOmQmI);
 			}
 			} catch (Exception e) {
