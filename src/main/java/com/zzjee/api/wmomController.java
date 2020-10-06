@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.zzjee.md.entity.MdBinEntity;
 import com.zzjee.md.entity.MvGoodsEntity;
 import com.zzjee.rfid.entity.RfidBuseEntity;
 import com.zzjee.wave.entity.WaveToDownEntity;
@@ -232,7 +233,21 @@ public class wmomController {
 		if(listwmom!=null&&listwmom.size()==0){
 			return	Result.error("不存在数据");
 		}
-		return Result.success(listwmom);
+
+		List<WmOmQmIEntity>  listwmomnew = new ArrayList<>();
+		for( WmOmQmIEntity t:  listwmom ){
+			if(StringUtil.isNotEmpty(t.getBinId())){
+				try{
+					String chuhuokou = "";
+					MdBinEntity mdBinEntity = systemService.findUniqueByProperty(MdBinEntity.class,"kuWeiBianMa",t.getBinId());
+					chuhuokou = mdBinEntity.getMianJiDanWei();
+					t.setRecDeg(chuhuokou);
+				}catch (Exception e){
+				}
+			}
+			listwmomnew.add(t);
+		}
+		return Result.success(listwmomnew);
 	}
 
 
