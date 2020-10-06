@@ -180,7 +180,8 @@ public class wmomController {
 	@RequestMapping(value = "/getbin/{barcode}", method = RequestMethod.GET)
 	@ResponseBody
 	@ApiOperation(value = "根据barcode获取上架储位息", notes = "根据barcode获取上架储位息", httpMethod = "GET", produces = "application/json")
-	public ResponseMessage<?> getshangjiachuawei(@ApiParam(required = true, name = "barcode", value = "barcode") @PathVariable("barcode") String barcode) {
+	public ResponseMessage<?> getshangjiachuawei(@ApiParam(required = true, name = "barcode", value = "barcode") @PathVariable("barcode") String barcode
+			, HttpServletRequest request) {
 		String Hql = "from WmInQmIEntity where tinId =  ?  and binSta = ?";
 		List<WmInQmIEntity>  listwmin = systemService.findHql(Hql,barcode,"N");
 
@@ -192,6 +193,17 @@ public class wmomController {
 		}
 		if(listwmin!=null&&listwmin.size()>1){
 			return	Result.error("存在重复的托盘号");
+		}
+		try{
+			String weight = request.getParameter("weight");
+			String volumn = request.getParameter("volumn");
+			RfidBuseEntity rfidBuseEntity = new RfidBuseEntity();
+			rfidBuseEntity.setRfidId1(barcode);
+			rfidBuseEntity.setRfidId2(weight);
+			rfidBuseEntity.setRfidId3(volumn);
+			systemService.save(rfidBuseEntity);
+		}catch (Exception e){
+
 		}
 
 		return Result.success(listwmin.get(0));
