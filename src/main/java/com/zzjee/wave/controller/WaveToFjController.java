@@ -345,7 +345,8 @@ public class WaveToFjController extends BaseController {
 	@ResponseBody
 	public ResponseEntity<?> list(@RequestParam(value="username", required=false) String username,
 								  @RequestParam(value="searchstr", required=false)String searchstr,
-								  @RequestParam(value="searchstr2", required=false)String searchstr2) {
+								  @RequestParam(value="searchstr2", required=false)String searchstr2,
+								  @RequestParam(value="searchstr3", required=false)String searchstr3) {
 		ResultDO D0 = new  ResultDO();
 		D0.setOK(true);
 		String hql="from WaveToDownEntity where waveId = ?  ";
@@ -370,21 +371,26 @@ public class WaveToFjController extends BaseController {
 			listWaveToFjs=waveToFjService.findHql(hql,searchstr,searchstr2);
 		}
 //		List<WaveToFjEntity> listWaveToFjs=waveToFjService.getList(WaveToFjEntity.class);
-		for(WaveToFjEntity t:listWaveToFjs){
-			try{
-                String siji = "";
-                String chehao = "";
-				WmOmNoticeHEntity wmom = systemService.findUniqueByProperty(WmOmNoticeHEntity.class,"omNoticeId",t.getOmNoticeId());
-				  siji = wmom.getReMember();
-				  chehao = wmom.getReCarno();
+ 		for(WaveToFjEntity t:listWaveToFjs) {
+			if (StringUtil.isNotEmpty(searchstr3)) {
+				if (!StringUtil.strPos(t.getGoodsId(), searchstr3)) {
+					continue;
+				}
+			}
+			try {
+				String siji = "";
+				String chehao = "";
+				WmOmNoticeHEntity wmom = systemService.findUniqueByProperty(WmOmNoticeHEntity.class, "omNoticeId", t.getOmNoticeId());
+				siji = wmom.getReMember();
+				chehao = wmom.getReCarno();
 				t.setBy1(siji);//司机
 				t.setBy2(chehao);//车号
-			}catch (Exception e){
+			} catch (Exception e) {
 			}
 			listWaveToFjsnew.add(t);
 		}
 
-		D0.setObj(listWaveToFjs);
+		D0.setObj(listWaveToFjsnew);
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -412,6 +418,12 @@ public class WaveToFjController extends BaseController {
 				wmOmQmI.setBinSta("Y");
 				wmOmQmI.setSecondRq(waveToFj.getSecondRq());
 				systemService.saveOrUpdate(wmOmQmI);
+				String hql = "From WmOmQmIEntity where omNoticeId = ? and  binSta = ?";
+				List<WmOmQmIEntity> listom = systemService.findHql(hql,wmOmQmI.getOmNoticeId(),"H");
+				for(WmOmQmIEntity tom: listom){
+					tom.setSecondRq(waveToFj.getSecondRq());
+					systemService.saveOrUpdate(tom);
+				}
 			}
 			} catch (Exception e) {
 			e.printStackTrace();

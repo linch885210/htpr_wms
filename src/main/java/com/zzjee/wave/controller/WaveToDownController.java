@@ -69,12 +69,12 @@ import java.net.URI;
 import org.springframework.http.MediaType;
 import org.springframework.web.util.UriComponentsBuilder;
 
-/**   
- * @Title: Controller  
+/**
+ * @Title: Controller
  * @Description: wave_to_down
  * @author onlineGenerator
  * @date 2019-12-11 11:32:25
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Controller
@@ -91,12 +91,12 @@ public class WaveToDownController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
-	
+
 
 
 	/**
 	 * wave_to_down列表 页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "list")
@@ -106,7 +106,7 @@ public class WaveToDownController extends BaseController {
 
 	/**
 	 * easyui AJAX请求数据
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param dataGrid
@@ -143,10 +143,10 @@ public class WaveToDownController extends BaseController {
 		this.waveToDownService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
 	}
-	
+
 	/**
 	 * 删除wave_to_down
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
@@ -167,10 +167,10 @@ public class WaveToDownController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 批量删除wave_to_down
-	 * 
+	 *
 	 * @return
 	 */
 	 @RequestMapping(params = "doBatchDel")
@@ -181,7 +181,7 @@ public class WaveToDownController extends BaseController {
 		message = "wave_to_down删除成功";
 		try{
 			for(String id:ids.split(",")){
-				WaveToDownEntity waveToDown = systemService.getEntity(WaveToDownEntity.class, 
+				WaveToDownEntity waveToDown = systemService.getEntity(WaveToDownEntity.class,
 				id
 				);
 				waveToDownService.delete(waveToDown);
@@ -199,7 +199,7 @@ public class WaveToDownController extends BaseController {
 
 	/**
 	 * 添加wave_to_down
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -220,10 +220,10 @@ public class WaveToDownController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 更新wave_to_down
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doUpdate")
@@ -245,11 +245,11 @@ public class WaveToDownController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 
 	/**
 	 * wave_to_down新增页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
@@ -262,7 +262,7 @@ public class WaveToDownController extends BaseController {
 	}
 	/**
 	 * wave_to_down编辑页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
@@ -273,10 +273,10 @@ public class WaveToDownController extends BaseController {
 		}
 		return new ModelAndView("com/zzjee/wave/waveToDown-update");
 	}
-	
+
 	/**
 	 * 导入功能跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "upload")
@@ -284,10 +284,10 @@ public class WaveToDownController extends BaseController {
 		req.setAttribute("controller_name","waveToDownController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
-	
+
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -306,7 +306,7 @@ public class WaveToDownController extends BaseController {
 	}
 	/**
 	 * 导出excel 使模板
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -320,13 +320,13 @@ public class WaveToDownController extends BaseController {
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxJson importExcel(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
-		
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -354,7 +354,7 @@ public class WaveToDownController extends BaseController {
 		}
 		return j;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public List<WaveToDownEntity> list() {
@@ -366,13 +366,15 @@ public class WaveToDownController extends BaseController {
     @ResponseBody
     public ResponseEntity<?> list(@RequestParam(value="username", required=false) String username,
                                   @RequestParam(value="searchstr", required=false)String searchstr,
-                                  @RequestParam(value="searchstr2", required=false)String searchstr2) {
+                                  @RequestParam(value="searchstr2", required=false)String searchstr2,
+								  @RequestParam(value="searchstr3", required=false)String searchstr3) {
         ResultDO D0 = new  ResultDO();
         D0.setOK(true);
 
         String hql="from WaveToDownEntity where waveId = ?  ";
 
         List<WaveToDownEntity> listWaveToDowns =new ArrayList<>();
+        List<WaveToDownEntity> listWaveToDownsnew =new ArrayList<>();
         if(StringUtil.isEmpty(searchstr)&&StringUtil.isEmpty(searchstr2)){
             hql="from WaveToDownEntity    ";
             listWaveToDowns = waveToDownService.findHql(hql);
@@ -389,7 +391,16 @@ public class WaveToDownController extends BaseController {
             hql="from WaveToDownEntity where waveId = ? and  binId = ?";
 			listWaveToDowns = waveToDownService.findHql(hql,searchstr,searchstr2);
 		}
-         D0.setObj(listWaveToDowns);
+		if(StringUtil.isNotEmpty(searchstr3)){
+			for(WaveToDownEntity t: listWaveToDowns ){
+				if(StringUtil.strPos(t.getGoodsId(),searchstr3)){
+					listWaveToDownsnew.add(t);
+
+				}
+			}
+		}
+
+         D0.setObj(listWaveToDownsnew);
         return new ResponseEntity(D0, HttpStatus.OK);
     }
 
