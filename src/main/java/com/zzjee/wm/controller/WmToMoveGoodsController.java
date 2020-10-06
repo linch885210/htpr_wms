@@ -58,12 +58,12 @@ import com.zzjee.wmutil.wmUtil;
 
 import static com.xiaoleilu.hutool.date.DateTime.now;
 
-/**   
- * @Title: Controller  
+/**
+ * @Title: Controller
  * @Description: 库存转移
  * @author erzhongxmu
  * @date 2017-09-08 21:03:22
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Controller
@@ -80,12 +80,12 @@ public class WmToMoveGoodsController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
-	
+
 
 
 	/**
 	 * 库存转移列表 页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "list")
@@ -95,7 +95,7 @@ public class WmToMoveGoodsController extends BaseController {
 
 	/**
 	 * easyui AJAX请求数据
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param dataGrid
@@ -112,17 +112,17 @@ public class WmToMoveGoodsController extends BaseController {
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
-		Map<String,Object> map1 = new HashMap<String,Object>();  
-		map1.put("createDate", "desc");  
-		cq.setOrder(map1); 
+		Map<String,Object> map1 = new HashMap<String,Object>();
+		map1.put("createDate", "desc");
+		cq.setOrder(map1);
 		cq.add();
 		this.wmToMoveGoodsService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
 	}
-	
+
 	/**
 	 * 删除库存转移
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
@@ -161,7 +161,16 @@ public class WmToMoveGoodsController extends BaseController {
 				WmToMoveGoodsEntity wmToMoveGoods = systemService.getEntity(WmToMoveGoodsEntity.class,
 						id
 				);
-				wmToMoveGoods.setMoveSta("已完成");
+				message = "批量保存成功";
+				String movesta = "已完成";
+				try{
+					movesta = ResourceUtil.getConfigByName("wm.movesta");
+
+				}catch (Exception e){
+
+				}
+
+				wmToMoveGoods.setMoveSta(movesta);
 				wmToMoveGoodsService.updateEntitie(wmToMoveGoods);
 				systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
 			}
@@ -176,7 +185,7 @@ public class WmToMoveGoodsController extends BaseController {
 
 	/**
 	 * 批量删除库存转移
-	 * 
+	 *
 	 * @return
 	 */
 	 @RequestMapping(params = "doBatchDel")
@@ -187,7 +196,7 @@ public class WmToMoveGoodsController extends BaseController {
 		message = "库存转移删除成功";
 		try{
 			for(String id:ids.split(",")){
-				WmToMoveGoodsEntity wmToMoveGoods = systemService.getEntity(WmToMoveGoodsEntity.class, 
+				WmToMoveGoodsEntity wmToMoveGoods = systemService.getEntity(WmToMoveGoodsEntity.class,
 				id
 				);
 				wmToMoveGoods.setMoveSta("已删除");
@@ -212,16 +221,16 @@ public class WmToMoveGoodsController extends BaseController {
 		public AjaxJson doGetstock(HttpServletRequest request) {
 			AjaxJson j = new AjaxJson();
 			WmToMoveGoodsEntity  wmToMoveGoods = new WmToMoveGoodsEntity();
-			
-			
-			
+
+
+
 			j.setObj(wmToMoveGoods);
 			return j;
 		}
-	 
+
 	/**
 	 * 添加库存转移
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doAdd")
@@ -242,10 +251,10 @@ public class WmToMoveGoodsController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 更新库存转移
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doUpdate")
@@ -296,7 +305,14 @@ public class WmToMoveGoodsController extends BaseController {
 						if(!wmUtil.checkstcok( jeecgDemo.getBinFrom(),jeecgDemo.getTinFrom(),jeecgDemo.getGoodsId(),jeecgDemo.getGoodsProData(),jeecgDemo.getBaseGoodscount())) {
 						}else{
 							message = "批量保存成功";
-							t.setMoveSta("已完成");
+							String movesta = "已完成";
+							try{
+								movesta = ResourceUtil.getConfigByName("wm.movesta");
+
+							}catch (Exception e){
+
+							}
+							t.setMoveSta(movesta);
 							MyBeanUtils.copyBeanNotNull2Bean(jeecgDemo, t);
 							systemService.saveOrUpdate(t);
 							systemService.addLog(message, Globals.Log_Type_UPDATE, Globals.Log_Leavel_INFO);
@@ -315,7 +331,7 @@ public class WmToMoveGoodsController extends BaseController {
 
 	/**
 	 * 库存转移新增页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
@@ -328,7 +344,7 @@ public class WmToMoveGoodsController extends BaseController {
 	}
 	/**
 	 * 库存转移编辑页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
@@ -339,10 +355,10 @@ public class WmToMoveGoodsController extends BaseController {
 		}
 		return new ModelAndView("com/zzjee/wm/wmToMoveGoods-update");
 	}
-	
+
 	/**
 	 * 导入功能跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "upload")
@@ -350,10 +366,10 @@ public class WmToMoveGoodsController extends BaseController {
 		req.setAttribute("controller_name","wmToMoveGoodsController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
-	
+
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -372,7 +388,7 @@ public class WmToMoveGoodsController extends BaseController {
 	}
 	/**
 	 * 导出excel 使模板
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -386,13 +402,13 @@ public class WmToMoveGoodsController extends BaseController {
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxJson importExcel(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
-		
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -431,7 +447,7 @@ public class WmToMoveGoodsController extends BaseController {
 		}
 		return j;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?>  list( @RequestParam(value="username", required=false) String username, @RequestParam(value="searchstr", required=false)String searchstr, @RequestParam(value="searchstr2", required=false)String searchstr2) {
@@ -475,7 +491,7 @@ public class WmToMoveGoodsController extends BaseController {
 		D0.setObj(result);
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
