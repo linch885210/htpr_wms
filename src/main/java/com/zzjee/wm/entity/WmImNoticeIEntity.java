@@ -17,12 +17,12 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.SequenceGenerator;
 import org.jeecgframework.poi.excel.annotation.Excel;
 
-/**   
+/**
  * @Title: Entity
  * @Description: 预约通知项目
  * @author erzhongxmu
  * @date 2017-09-11 15:08:34
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Entity
@@ -32,28 +32,28 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	/**主键*/
 	private java.lang.String id;
 	/**创建人名称*/
- 
+
 	private java.lang.String createName;
 	/**创建人登录名称*/
-   
+
 	private java.lang.String createBy;
 	/**创建日期*/
- 
+
 	private java.util.Date createDate;
 	/**更新人名称*/
-  
+
 	private java.lang.String updateName;
 	/**更新人登录名称*/
-    
+
 	private java.lang.String updateBy;
 	/**更新日期*/
-  
+
 	private java.util.Date updateDate;
 	/**所属部门*/
-   
+
 	private java.lang.String sysOrgCode;
 	/**所属公司*/
-    
+
 	private java.lang.String sysCompanyCode;
 	/**到货通知单号*/
     @Excel(name="到货通知单号")
@@ -80,40 +80,41 @@ public class WmImNoticeIEntity implements java.io.Serializable {
     @Excel(name="生产日期",format = "yyyy-MM-dd")
 	private java.util.Date goodsPrdData;
 	/**批次*/
- 
+
 	private java.lang.String goodsBatch;
 	/**库位整理*/
     @Excel(name="收货完成")
 	private java.lang.String binPre;
 	/**体积*/
- 
+
 	private java.lang.String goodsFvol;
 	/**重量*/
- 
+
 	private java.lang.String goodsWeight;
 	/**计划库位*/
-  
+
+	@Excel(name="计划储位数量")
 	private java.lang.String binPlan;
 	/**单位*/
     @Excel(name="单位")
 	private java.lang.String goodsUnit;
 	/**未清数量*/
-   
+
 	private java.lang.String goodsWqmCount;
 	/**批量收货数量*/
-  
+
 	private java.lang.String goodsQmCount;
 	/**行项目状态*/
- 
+
 	private java.lang.String noticeiSta;
 	/**基本单位*/
-    
+
 	private java.lang.String baseUnit;
 	/**基本单位数量*/
- 
+
 	private java.lang.String baseGoodscount;
 	/**基本单位收货数量*/
-   
+
 	private java.lang.String baseQmcount;
 	@Excel(name="商品条码")
 	private java.lang.String barCode;
@@ -128,7 +129,7 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	@Id
 	@GeneratedValue(generator = "paymentableGenerator")
 	@GenericGenerator(name = "paymentableGenerator", strategy = "uuid")
-	
+
 	@Column(name ="ID",nullable=false,length=36)
 	public java.lang.String getId(){
 		return this.id;
@@ -141,7 +142,7 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setId(java.lang.String id){
 		this.id = id;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  创建人名称
@@ -184,12 +185,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setCreateName(java.lang.String createName){
 		this.createName = createName;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  创建人登录名称
 	 */
-	
+
 	@Column(name ="CREATE_BY",nullable=true,length=50)
 	public java.lang.String getCreateBy(){
 		return this.createBy;
@@ -202,12 +203,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setCreateBy(java.lang.String createBy){
 		this.createBy = createBy;
 	}
-	
+
 	/**
 	 *方法: 取得java.util.Date
 	 *@return: java.util.Date  创建日期
 	 */
-	
+
 	@Column(name ="CREATE_DATE",nullable=true)
 	public java.util.Date getCreateDate(){
 		return this.createDate;
@@ -220,12 +221,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setCreateDate(java.util.Date createDate){
 		this.createDate = createDate;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  更新人名称
 	 */
-	
+
 	@Column(name ="UPDATE_NAME",nullable=true,length=50)
 	public java.lang.String getUpdateName(){
 		return this.updateName;
@@ -238,12 +239,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setUpdateName(java.lang.String updateName){
 		this.updateName = updateName;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  更新人登录名称
 	 */
-	
+
 	@Column(name ="UPDATE_BY",nullable=true,length=50)
 	public java.lang.String getUpdateBy(){
 		return this.updateBy;
@@ -256,12 +257,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setUpdateBy(java.lang.String updateBy){
 		this.updateBy = updateBy;
 	}
-	
+
 	/**
 	 *方法: 取得java.util.Date
 	 *@return: java.util.Date  更新日期
 	 */
-	
+
 	@Column(name ="UPDATE_DATE",nullable=true)
 	public java.util.Date getUpdateDate(){
 		return this.updateDate;
@@ -274,12 +275,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setUpdateDate(java.util.Date updateDate){
 		this.updateDate = updateDate;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  所属部门
 	 */
-	
+
 	@Column(name ="SYS_ORG_CODE",nullable=true,length=50)
 	public java.lang.String getSysOrgCode(){
 		return this.sysOrgCode;
@@ -292,12 +293,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setSysOrgCode(java.lang.String sysOrgCode){
 		this.sysOrgCode = sysOrgCode;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  所属公司
 	 */
-	
+
 	@Column(name ="SYS_COMPANY_CODE",nullable=true,length=50)
 	public java.lang.String getSysCompanyCode(){
 		return this.sysCompanyCode;
@@ -310,12 +311,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setSysCompanyCode(java.lang.String sysCompanyCode){
 		this.sysCompanyCode = sysCompanyCode;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  到货通知单号
 	 */
-	
+
 	@Column(name ="IM_NOTICE_ID",nullable=true,length=36)
 	public java.lang.String getImNoticeId(){
 		return this.imNoticeId;
@@ -328,12 +329,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setImNoticeId(java.lang.String imNoticeId){
 		this.imNoticeId = imNoticeId;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  到货通知项目
 	 */
-	
+
 	@Column(name ="IM_NOTICE_ITEM",nullable=true,length=36)
 	public java.lang.String getImNoticeItem(){
 		return this.imNoticeItem;
@@ -346,12 +347,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setImNoticeItem(java.lang.String imNoticeItem){
 		this.imNoticeItem = imNoticeItem;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  商品编码
 	 */
-	
+
 	@Column(name ="GOODS_CODE",nullable=true,length=32)
 	public java.lang.String getGoodsCode(){
 		return this.goodsCode;
@@ -364,12 +365,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsCode(java.lang.String goodsCode){
 		this.goodsCode = goodsCode;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  数量
 	 */
-	
+
 	@Column(name ="GOODS_COUNT",nullable=true,length=32)
 	public java.lang.String getGoodsCount(){
 		return this.goodsCount;
@@ -382,12 +383,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsCount(java.lang.String goodsCount){
 		this.goodsCount = goodsCount;
 	}
-	
+
 	/**
 	 *方法: 取得java.util.Date
 	 *@return: java.util.Date  生产日期
 	 */
-	
+
 	@Column(name ="GOODS_PRD_DATA",nullable=true)
 	public java.util.Date getGoodsPrdData(){
 		return this.goodsPrdData;
@@ -400,12 +401,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsPrdData(java.util.Date goodsPrdData){
 		this.goodsPrdData = goodsPrdData;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  批次
 	 */
-	
+
 	@Column(name ="GOODS_BATCH",nullable=true,length=32)
 	public java.lang.String getGoodsBatch(){
 		return this.goodsBatch;
@@ -418,12 +419,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsBatch(java.lang.String goodsBatch){
 		this.goodsBatch = goodsBatch;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  库位整理
 	 */
-	
+
 	@Column(name ="BIN_PRE",nullable=true,length=32)
 	public java.lang.String getBinPre(){
 		return this.binPre;
@@ -436,12 +437,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setBinPre(java.lang.String binPre){
 		this.binPre = binPre;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  体积
 	 */
-	
+
 	@Column(name ="GOODS_FVOL",nullable=true,length=32)
 	public java.lang.String getGoodsFvol(){
 		return this.goodsFvol;
@@ -454,12 +455,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsFvol(java.lang.String goodsFvol){
 		this.goodsFvol = goodsFvol;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  重量
 	 */
-	
+
 	@Column(name ="GOODS_WEIGHT",nullable=true,length=32)
 	public java.lang.String getGoodsWeight(){
 		return this.goodsWeight;
@@ -472,12 +473,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsWeight(java.lang.String goodsWeight){
 		this.goodsWeight = goodsWeight;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  计划库位
 	 */
-	
+
 	@Column(name ="BIN_PLAN",nullable=true,length=128)
 	public java.lang.String getBinPlan(){
 		return this.binPlan;
@@ -490,12 +491,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setBinPlan(java.lang.String binPlan){
 		this.binPlan = binPlan;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  单位
 	 */
-	
+
 	@Column(name ="GOODS_UNIT",nullable=true,length=36)
 	public java.lang.String getGoodsUnit(){
 		return this.goodsUnit;
@@ -508,12 +509,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsUnit(java.lang.String goodsUnit){
 		this.goodsUnit = goodsUnit;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  未清数量
 	 */
-	
+
 	@Column(name ="GOODS_WQM_COUNT",nullable=true,length=32)
 	public java.lang.String getGoodsWqmCount(){
 		return this.goodsWqmCount;
@@ -526,12 +527,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsWqmCount(java.lang.String goodsWqmCount){
 		this.goodsWqmCount = goodsWqmCount;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  批量收货数量
 	 */
-	
+
 	@Column(name ="GOODS_QM_COUNT",nullable=true,length=32)
 	public java.lang.String getGoodsQmCount(){
 		return this.goodsQmCount;
@@ -544,12 +545,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setGoodsQmCount(java.lang.String goodsQmCount){
 		this.goodsQmCount = goodsQmCount;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  行项目状态
 	 */
-	
+
 	@Column(name ="NOTICEI_STA",nullable=true,length=45)
 	public java.lang.String getNoticeiSta(){
 		return this.noticeiSta;
@@ -562,12 +563,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setNoticeiSta(java.lang.String noticeiSta){
 		this.noticeiSta = noticeiSta;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  基本单位
 	 */
-	
+
 	@Column(name ="BASE_UNIT",nullable=true,length=45)
 	public java.lang.String getBaseUnit(){
 		return this.baseUnit;
@@ -580,12 +581,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setBaseUnit(java.lang.String baseUnit){
 		this.baseUnit = baseUnit;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  基本单位数量
 	 */
-	
+
 	@Column(name ="BASE_GOODSCOUNT",nullable=true,length=45)
 	public java.lang.String getBaseGoodscount(){
 		return this.baseGoodscount;
@@ -598,12 +599,12 @@ public class WmImNoticeIEntity implements java.io.Serializable {
 	public void setBaseGoodscount(java.lang.String baseGoodscount){
 		this.baseGoodscount = baseGoodscount;
 	}
-	
+
 	/**
 	 *方法: 取得java.lang.String
 	 *@return: java.lang.String  基本单位收货数量
 	 */
-	
+
 	@Column(name ="BASE_QMCOUNT",nullable=true,length=45)
 	public java.lang.String getBaseQmcount(){
 		return this.baseQmcount;

@@ -468,13 +468,12 @@
 <!-- 							  <label class="Validform_label" style="display: none;">单位</label> -->
 <!-- 						  </td> -->
 
-<!-- 						  <td align="left"> -->
-<!-- 									<input name="wmImNoticeIList[#index#].goodsPrdData" maxlength="32"  -->
-<!-- 							  		type="text" class="form-control" onClick="WdatePicker()"  style="background: url('plug-in/ace/images/datetime.png') no-repeat scroll right center transparent;width:160px;" -->
-<!-- 									ignore="ignore" -->
-<!-- 							  		 > -->
-<!-- 							  <label class="Validform_label" style="display: none;">生产日期</label> -->
-<!-- 						  </td> -->
+					  <td align="left">
+						  <input name="wmImNoticeIList[#index#].binPlan" maxlength="32"
+								 ignore="ignore"
+								 type="text" class="form-control"  style="width:120px;text-align: right" >
+							  <label class="Validform_label" style="display: none;">计划占用储位数</label>
+ 						  </td>
 						  <td align="left">
 									<t:dictSelect field="wmImNoticeIList[#index#].binPre" type="radio" extendJson="{class:'form-control',style:'width:150px'}"
 													typeGroupCode="sf_yn" defaultVal="N" hasLabel="false"  title="收货完成"></t:dictSelect>
