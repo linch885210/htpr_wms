@@ -294,6 +294,7 @@ public class wmomController {
 			wmToDownGoods.setOmBeizhu(wmOmQmI.getOmBeizhu());//备注
 			wmToDownGoods.setImCusCode(wmOmQmI.getImCusCode());//客户单号
 			wmToDownGoods.setOrderType("01");//默认为01
+			wmToDownGoods.setCreateDate(now());
 			systemService.save(wmToDownGoods);
 			wmOmQmI.setBinSta("Y");
 			systemService.saveOrUpdate(wmOmQmI);
@@ -366,6 +367,7 @@ public class wmomController {
 			wmToUpGoodsEntity.setGoodsName(wmInQmIEntity.getGoodsName());
 			wmToUpGoodsEntity.setActTypeCode("01");
 			wmToUpGoodsEntity.setWmToUpId(wmInQmIEntity.getId());
+			wmToUpGoodsEntity.setCreateDate(now());
 //			String sql = "select     md.suo_shu_ke_hu as cuscode from    md_bin md  where    md.ku_wei_bian_ma = '"
 //					+ wmInQmIEntity.getBinId() + "'";
 //			Map<String, Object> binMap = systemService.findOneForJdbc(sql);

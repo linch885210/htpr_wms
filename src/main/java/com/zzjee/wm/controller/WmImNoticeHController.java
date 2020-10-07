@@ -2278,7 +2278,7 @@ Double sum =0.00;
 					long hiti = 0;
 					try {
 						if(StringUtil.isEmpty(wmImNoticeIEntity.getBinPlan())){
-							hiti = Long.parseLong(wmImNoticeIEntity.getGoodsCount())/  Long.parseLong(mvgoods.getMpCengGao()) * Long.parseLong(mvgoods.getMpDanCeng()) * Long.parseLong(mvgoods.getChlShl());
+							hiti = Long.parseLong(wmImNoticeIEntity.getGoodsCount())/ ( Long.parseLong(mvgoods.getMpCengGao()) * Long.parseLong(mvgoods.getMpDanCeng()) * Long.parseLong(mvgoods.getChlShl()));
 							wmImNoticeIEntity.setBinPlan(Long.toString(hiti));
 						}
 					} catch (Exception e) {
