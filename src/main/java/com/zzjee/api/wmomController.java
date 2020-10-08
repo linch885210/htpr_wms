@@ -358,7 +358,7 @@ public class wmomController {
 				return o2.getToCusName().compareTo(o1.getToCusName());
 			}
 		});
-		return Result.success(listmove);
+		return Result.success(listmovenew);
 	}
 	@RequestMapping(value = "/setmove/{id}", method = RequestMethod.GET)
 	@ResponseBody
