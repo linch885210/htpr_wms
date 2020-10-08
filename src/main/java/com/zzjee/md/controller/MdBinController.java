@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import com.zzjee.rfid.entity.RfidBuseEntity;
 import com.zzjee.wmutil.wmUtil;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
@@ -148,7 +149,52 @@ public class MdBinController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
+	/**
+	 * 删除仓位定义
+	 *
+	 * @return
+	 */
+	@RequestMapping(params = "doHad")
+	@ResponseBody
+	public AjaxJson doHad(MdBinEntity mdBin, HttpServletRequest request) {
+		String message = null;
+		AjaxJson j = new AjaxJson();
+		mdBin = systemService.getEntity(MdBinEntity.class, mdBin.getId());
+		message = "仓位同步有货成功";
+		try{
+//			mdBin.setTingYong("Y");
+//			mdBinService.saveOrUpdate(mdBin);
+			if(wmUtil.checkishavestock("bin",mdBin.getKuWeiBianMa())){
+				RfidBuseEntity rfidBuseEntity = new RfidBuseEntity();
+				rfidBuseEntity.setRfidType("CW");
+				rfidBuseEntity.setRfidId1(mdBin.getKuWeiBianMa());
+				rfidBuseEntity.setRfidId2("Y");
+				rfidBuseEntity.setBpmStatus("1");
+				systemService.save(rfidBuseEntity);
+				message = "仓位同步有货成功";
+				j.setSuccess(false);
+				j.setMsg(message);
+				return j;
+			}else{
+				RfidBuseEntity rfidBuseEntity = new RfidBuseEntity();
+				rfidBuseEntity.setRfidType("CW");
+				rfidBuseEntity.setRfidId1(mdBin.getKuWeiBianMa());
+				rfidBuseEntity.setRfidId2("N");
+				rfidBuseEntity.setBpmStatus("1");
+				systemService.save(rfidBuseEntity);
+				message = "仓位同步无货成功";
+				j.setSuccess(false);
+				j.setMsg(message);
+				return j;
+			}
 
+		}catch(Exception e){
+			e.printStackTrace();
+			message = "仓位同步失败功";
+			throw new BusinessException(e.getMessage());
+		}
+
+	}
 
 
 	@RequestMapping(params = "getbinall")
@@ -199,6 +245,7 @@ public class MdBinController extends BaseController {
 		}
 		return j;
 	}
+
 
 
 	/**

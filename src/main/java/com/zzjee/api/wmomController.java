@@ -262,7 +262,24 @@ public class wmomController {
 		}
 		return Result.success(listwmomnew);
 	}
+	@RequestMapping(value = "/getstatus", method = RequestMethod.GET)
+	@ResponseBody
+	@ApiOperation(value = "获取储位状态列表", notes = "获取储位状态列表", httpMethod = "GET", produces = "application/json")
+	public ResponseMessage<?> getstatus() {
+		String Hql = "from RfidBuseEntity where   rfidType = ? and bpmStatus = ?";
+		List<RfidBuseEntity>  listwmom = systemService.findHql(Hql,"CW","1");
 
+		if(listwmom==null){
+			return	Result.error("不存在数据");
+		}
+
+		if(listwmom!=null&&listwmom.size()==0){
+			return	Result.error("不存在数据");
+		}
+
+
+		return Result.success(listwmom);
+	}
 
 	@RequestMapping(value = "/setxiajia/{id}", method = RequestMethod.GET)
 	@ResponseBody
