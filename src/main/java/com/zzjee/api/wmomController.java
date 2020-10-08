@@ -3,10 +3,7 @@ package com.zzjee.api;
 
 import static com.xiaoleilu.hutool.date.DateTime.now;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -255,11 +252,22 @@ public class wmomController {
 					MdBinEntity mdBinEntity = systemService.findUniqueByProperty(MdBinEntity.class,"kuWeiBianMa",t.getBinId());
 					chuhuokou = mdBinEntity.getMianJiDanWei();
 					t.setRecDeg(chuhuokou);
+					t.setPickNotice(mdBinEntity.getQuHuoCiXu());
 				}catch (Exception e){
 				}
 			}
 			listwmomnew.add(t);
 		}
+
+
+		//第一个写法
+		Collections.sort(listwmomnew, new Comparator<WmOmQmIEntity>() {
+			@Override
+			public int compare(WmOmQmIEntity o1, WmOmQmIEntity o2) {
+				return o2.getPickNotice().compareTo(o1.getPickNotice());
+			}
+		});
+
 		return Result.success(listwmomnew);
 	}
 	@RequestMapping(value = "/getstatus", method = RequestMethod.GET)
