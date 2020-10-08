@@ -45,7 +45,7 @@
     <t:dgCol title="备注2"  field="mingXi2"    queryMode="group"  width="120"></t:dgCol>
     <t:dgCol title="电子标签ID"  field="lorabqId"    queryMode="group"  width="120"></t:dgCol>
 
-<%--    <t:dgCol title="操作" field="opt" width="100"></t:dgCol> --%>
+    <t:dgCol title="操作" field="opt" width="100"></t:dgCol>
    <t:dgDelOpt title="停用" url="mdBinController.do?doDel&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"  exp="tingYong#ne#Y"/>
    <t:dgDelOpt title="同步WCS" url="mdBinController.do?doHad&id={id}" urlclass="ace_button"  urlfont="fa-trash-o"  exp="tingYong#ne#Y"/>
    <t:dgToolBar title="录入" icon="icon-add" url="mdBinController.do?goAdd" funname="add"></t:dgToolBar>
