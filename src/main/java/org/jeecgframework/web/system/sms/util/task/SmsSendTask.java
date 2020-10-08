@@ -72,9 +72,9 @@ public class SmsSendTask {
 		try {//查找储位 设置批量收货基本数量
 			List<WmInQmIEntity> WmInQmlist = new ArrayList<WmInQmIEntity>();
 			hql = null;
-			hql = "from WmInQmIEntity t where t.binSta=? and (t.binId is null or t.binId = '' )  ";
+			hql = "from WmInQmIEntity t where t.binSta= 'N' and (t.binId is null or t.binId = '' )  ";
 
-			WmInQmlist = systemService.findHql(hql, new Object[] { "N" });
+			WmInQmlist = systemService.findHql(hql);
 			for (WmInQmIEntity wmInQmIEntity : WmInQmlist) {
 
 				if(wmInQmIEntity.getImNoticeId().startsWith("YK")){//越库任务
@@ -108,9 +108,9 @@ public class SmsSendTask {
 
 						}
 
-						String hqllastbin = "from WmInQmIEntity t where t.binSta=? and (t.binId is not null or t.binId <>  '' )  and imNoticeItem = ?  order by updateDate desc ";
+						String hqllastbin = "from WmInQmIEntity t where t.binSta= 'Y' and (t.binId is not null or t.binId <>  '' )  and imNoticeItem = ?  order by updateDate desc ";
 
-						List<WmInQmIEntity> WmInQmbinlist = systemService.findHql(hql, new Object[] { "Y" },wmInQmIEntity.getImNoticeItem());
+						List<WmInQmIEntity> WmInQmbinlist = systemService.findHql(hqllastbin,wmInQmIEntity.getImNoticeItem());
 
 						String lastbin = ""; //本单上一个储位
 						String lastbinfenzu = "";   //本单上一个储位分组
@@ -121,7 +121,7 @@ public class SmsSendTask {
 								lastbinfenzu = mdblist.get(0).getZuiDaMianJi();
 							}
 						}
-						sql = "select  binid     from          wv_avabin      where   ku_wei_lei_xing <> '不良品区'  and zui_da_mian_ji = '" +lastbinfenzu+
+						sql = "select  binid     from          wv_avabin      where   ting_yong <> 'Y'  and zui_da_mian_ji = '" +lastbinfenzu+
 								"'   and   zui_da_ti_ji >"
 								+ zuidatiji
 								+ "  and ku_wei_shu_xing = (select cf_wen_ceng from mv_goods  where goods_code =  '"
@@ -143,7 +143,7 @@ public class SmsSendTask {
 							systemService.updateEntitie(wmInQmIEntity);
 						}else{
 
-							sql = "select  binid     from          wv_avabin      where   ku_wei_lei_xing <> '不良品区' and  ti_ji_dan_wei <= " +binplantuopan+
+							sql = "select  binid     from          wv_avabin      where   ting_yong <> 'Y' and  ti_ji_dan_wei <= " +binplantuopan+
 									"   and zhong_liang_dan_wei >= " +binplantuopan+
 									"    and   zui_da_ti_ji >"
 									+ zuidatiji
@@ -220,7 +220,7 @@ public class SmsSendTask {
 				systemService.saveOrUpdate(wmInQmIEntity);
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		try {
 			// 更新上架商品基本单位基本数量
@@ -492,7 +492,7 @@ public class SmsSendTask {
 
 						String tsql = "select ws.base_unit,ws.zhong_wen_qch, ws.ku_wei_bian_ma,ws.bin_id,ws.shp_ming_cheng,cast(sum(ws.base_goodscount) as signed) as goods_qua, mb.qu_huo_ci_xu, ws.goods_pro_data"
 								+ "  from wv_stock ws, md_bin mb  where "
-								+ "   ws.ku_wei_bian_ma = mb.ku_wei_bian_ma  and mb.ku_wei_lei_xing = '良品区' and mb.ting_yong <> 'Y' and (ws.kuctype = '库存' or ws.kuctype = '待下架')"
+								+ "   ws.ku_wei_bian_ma = mb.ku_wei_bian_ma  and mb.ting_yong <> 'Y' and (ws.kuctype = '库存' or ws.kuctype = '待下架')"
 								;
 						String aldown = "no";
 						try {
@@ -548,7 +548,7 @@ public class SmsSendTask {
 								if (Long.parseLong(hiti) <= omcountwq) {
 									String tsqlz = "select ws.base_unit,ws.zhong_wen_qch, ws.ku_wei_bian_ma,ws.bin_id,ws.shp_ming_cheng,cast(sum(ws.base_goodscount) as signed) as goods_qua, mb.qu_huo_ci_xu, ws.goods_pro_data"
 											+ "  from wv_stock ws, md_bin mb  where "
-											+ "   ws.ku_wei_bian_ma = mb.ku_wei_bian_ma  and mb.ku_wei_lei_xing = '良品区' and mb.ting_yong <> 'Y' and (ws.kuctype = '库存' or ws.kuctype = '待下架')";
+											+ "   ws.ku_wei_bian_ma = mb.ku_wei_bian_ma   and mb.ting_yong <> 'Y' and (ws.kuctype = '库存' or ws.kuctype = '待下架')";
 
 
 									if("yes".equals(aldown)){

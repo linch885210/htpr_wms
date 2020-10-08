@@ -33,7 +33,7 @@
     <t:dgCol title="备注"  field="itemText"    queryMode="group"  width="50"></t:dgCol>
     <t:dgCol title="生产日期"  field="proData"  extendParams="editor:'text'"    queryMode="group"  width="80"></t:dgCol>
     <t:dgCol title="托盘"  field="tinId" extendParams="editor:'text'"  query="true"   queryMode="single"  width="70"></t:dgCol>
-   
+
 <%--     <t:dgCol title="批次"  field="goodsBatch"    queryMode="group"  width="120"></t:dgCol> --%>
     <t:dgCol title="仓位"  field="binId" extendParams="editor:'text'"   query="true"   queryMode="single"  width="90"></t:dgCol>
 <%--     <t:dgCol title="体积"  field="tinTj"    queryMode="group"  width="70"></t:dgCol> --%>
@@ -79,7 +79,7 @@
 
   </div>
  </div>
- <script src = "webpage/com/zzjee/wm/wmOmQmIList.js"></script>		
+ <script src = "webpage/com/zzjee/wm/wmOmQmIList.js"></script>
  <script type="text/javascript">
 
 
@@ -138,7 +138,7 @@
 				if (d.success) {
 					tip("波次生成成功");
 			        $('#wmOmQmIList').datagrid('reload',{});
-				}		
+				}
 			}
 		});
 	}
@@ -170,7 +170,7 @@
      });
  }
 
- 
+
  function doassignALLSelect(){
 
 	 var ids = [];
@@ -191,11 +191,11 @@
 				if (d.success) {
 					tip("添加到下架任务清单成功");
 			        $('#wmOmQmIList').datagrid('reload',{});
-				}		
+				}
 			}
 		});
 	}
- 
+
  function taskassign(id){
 		var url = "wmOmQmIController.do?doassign&id="+id;
 		$.ajax({
@@ -210,11 +210,13 @@
 				if (d.success) {
 					tip("添加到下架任务清单成功");
 			        $('#wmOmQmIList').datagrid('reload',{});
-				}		
+                    windows.open("http://192.168.0.102:9080/fxj-boot/fxj/base/getxiajia");
+
+                }
 			}
 		});
 	}
- 
+
  function wmtodown(id){
 		var url = "wmOmQmIController.do?dotodown&id="+id;
 		$.ajax({
@@ -229,7 +231,7 @@
 				if (d.success) {
 					tip("下架成功");
 			        $('#wmOmQmIList').datagrid('reload',{});
-				}		
+				}
 			}
 		});
 	}

@@ -50,12 +50,6 @@
 			    <!-- tab内容 -->
 			    <div class="con-wrapper" id="con-wrapper1" style="display: block;">
 			      <div class="row form-wrapper">
-
-
-
-
-
-
 					  <div class="row show-grid">
 						  <div class="col-xs-3 text-center">
 							  <b style="color:red">库存地点</b>

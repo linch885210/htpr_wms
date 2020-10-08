@@ -201,6 +201,7 @@ public class wmomController {
 			rfidBuseEntity.setRfidId1(barcode);
 			rfidBuseEntity.setRfidId2(weight);
 			rfidBuseEntity.setRfidId3(volumn);
+			rfidBuseEntity.setCreateDate(now());
 			systemService.save(rfidBuseEntity);
 		}catch (Exception e){
 
