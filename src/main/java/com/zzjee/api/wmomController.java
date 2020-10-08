@@ -327,9 +327,6 @@ public class wmomController {
 		}
 		return Result.success("下架成功");
 	}
-
-
-
 	@RequestMapping(value = "/getmove", method = RequestMethod.GET)
 	@ResponseBody
 	@ApiOperation(value = "获取移动列表", notes = "获取移动列表", httpMethod = "GET", produces = "application/json")
@@ -342,6 +339,25 @@ public class wmomController {
 		if(listmove!=null&&listmove.size()==0){
 			return	Result.error("不存在移动");
 		}
+		List<WmToMoveGoodsEntity>  listmovenew = new ArrayList<>();
+		//第一个写法
+		for( WmToMoveGoodsEntity t:  listmove ){
+			if(StringUtil.isNotEmpty(t.getBinFrom())){
+				try{
+					String chuhuokou = "";
+					MdBinEntity mdBinEntity = systemService.findUniqueByProperty(MdBinEntity.class,"kuWeiBianMa",t.getBinFrom());
+  					t.setToCusName(mdBinEntity.getQuHuoCiXu());
+				}catch (Exception e){
+				}
+			}
+			listmovenew.add(t);
+		}
+		Collections.sort(listmovenew, new Comparator<WmToMoveGoodsEntity>() {
+			@Override
+			public int compare(WmToMoveGoodsEntity o1, WmToMoveGoodsEntity o2) {
+				return o2.getToCusName().compareTo(o1.getToCusName());
+			}
+		});
 		return Result.success(listmove);
 	}
 	@RequestMapping(value = "/setmove/{id}", method = RequestMethod.GET)
