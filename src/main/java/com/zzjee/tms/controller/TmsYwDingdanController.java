@@ -447,6 +447,14 @@ public class TmsYwDingdanController extends BaseController {
 				TmsYwDingdanEntity tmsYwDingdan1 = systemService.getEntity(TmsYwDingdanEntity.class,
 						id1);
 				WmTmsNoticeHEntity wmsom = systemService.findUniqueByProperty(WmTmsNoticeHEntity.class,"omNoticeId",tmsYwDingdan1.getFadh());
+				try{
+					wmsom.setReMobile(wmsom.getReMember());
+					wmsom.setReMember(siji);
+				}catch (Exception e){
+
+				}
+
+
 				if(!maphz.containsKey(wmsom.getCusCode())){
 					maphz.put(wmsom.getCusCode(),wmsom.getOmNoticeId());
 				}else{
