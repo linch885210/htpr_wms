@@ -2674,7 +2674,7 @@ public class WmOmNoticeHController extends BaseController {
 			listWaveToDowns = wmOmNoticeHService.findHql(hql,"复核完成",username);
 
 		}
-		listWaveToDowns = wmOmNoticeHService.findHql(hql);
+//		listWaveToDowns = wmOmNoticeHService.findHql(hql);
 		D0.setObj(listWaveToDowns);
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
