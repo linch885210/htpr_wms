@@ -179,12 +179,11 @@
 								</div>
 								<div class="col-xs-2">
 									<input id="imCusCode" name="imCusCode" type="text" class="form-control"
-										   ignore="ignore"  validType="wm_om_notice_h,im_cus_code,id"
+										   required="required"   ignore="ignore" datatype="*"  validType="wm_om_notice_h,im_cus_code,id"
 										    />
 									<span class="Validform_checktip"> 不能重复</span>
  								</div>
-
-							</div>
+ 							</div>
 					  <div class="row show-grid">
 
 					  <div class="col-xs-1 text-center">
