@@ -288,6 +288,14 @@ public class wmUtil {
 	public static String getCusCode(){
 		SystemService systemService =ApplicationContextUtil.getContext().getBean(SystemService.class);
 		String cusCode = "";
+		String cusrole = "";
+		try{
+			cusrole = ResourceUtil.getConfigByName("cus.role");
+
+		}catch (Exception e){
+			cusrole = "CUS";
+
+		}
 		try{
 			TSUser user = ResourceUtil.getSessionUserName();
 			String roles = "";
@@ -300,7 +308,7 @@ public class wmUtil {
 				if (roles.length() > 0) {
 					roles = roles.substring(0, roles.length() - 1);
 				}
-				if(roles.equals("CUS")){
+				if(roles.equals(cusrole)){
 					cusCode =  user.getUserName();
 
 				}
