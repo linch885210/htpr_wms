@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import com.zzjee.wmutil.wmUtil;
 import org.apache.log4j.Logger;
 import org.jeecgframework.core.beanvalidator.BeanValidators;
 import org.jeecgframework.core.common.controller.BaseController;
@@ -51,12 +52,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.zzjee.bm.entity.WvDayCostSumEntity;
 import com.zzjee.bm.service.WvDayCostSumServiceI;
 
-/**   
- * @Title: Controller  
+/**
+ * @Title: Controller
  * @Description: wv_day_cost_sum
  * @author erzhongxmu
  * @date 2017-10-21 21:08:13
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Controller
@@ -73,12 +74,12 @@ public class WvDayCostSumController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
-	
+
 
 
 	/**
 	 * wv_day_cost_sum列表 页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "list")
@@ -92,7 +93,7 @@ public class WvDayCostSumController extends BaseController {
 
 	/**
 	 * easyui AJAX请求数据
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param dataGrid
@@ -108,6 +109,9 @@ public class WvDayCostSumController extends BaseController {
 		org.jeecgframework.core.extend.hqlsearch.HqlGenerateUtil.installHql(cq, wvDayCostSum, request.getParameterMap());
 		try{
 			//自定义追加查询条件
+			if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+				cq.eq("cusCode", wmUtil.getCusCode());
+			}
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
@@ -163,7 +167,7 @@ public class WvDayCostSumController extends BaseController {
 		}
 		cq.add();
 		this.wvDayCostSumService.getDataGridReturn(cq, true);
-		
+
 		try {
 			List<WvDayCostSumEntity> resultold = dataGrid.getResults();
 			Double dayCostYj = 0.0000;
@@ -196,13 +200,13 @@ public class WvDayCostSumController extends BaseController {
 			// TODO: handle exception
 			throw new BusinessException(e.getMessage());
 		}
-		
+
 		TagUtil.datagrid(response, dataGrid);
 	}
-	
+
 	/**
 	 * 删除wv_day_cost_sum
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
@@ -223,10 +227,10 @@ public class WvDayCostSumController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 批量删除wv_day_cost_sum
-	 * 
+	 *
 	 * @return
 	 */
 	 @RequestMapping(params = "doBatchDel")
@@ -237,7 +241,7 @@ public class WvDayCostSumController extends BaseController {
 		message = "删除成功";
 		try{
 			for(String id:ids.split(",")){
-				WvDayCostSumEntity wvDayCostSum = systemService.getEntity(WvDayCostSumEntity.class, 
+				WvDayCostSumEntity wvDayCostSum = systemService.getEntity(WvDayCostSumEntity.class,
 				id
 				);
 				wvDayCostSumService.delete(wvDayCostSum);
@@ -255,7 +259,7 @@ public class WvDayCostSumController extends BaseController {
 
 	/**
 	 * 添加
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -276,10 +280,10 @@ public class WvDayCostSumController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 更新wv_day_cost_sum
-	 * 
+	 *
 	 * @param ids
 	 * @return
 	 */
@@ -302,11 +306,11 @@ public class WvDayCostSumController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 
 	/**
 	 * wv_day_cost_sum新增页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
@@ -319,7 +323,7 @@ public class WvDayCostSumController extends BaseController {
 	}
 	/**
 	 * wv_day_cost_sum编辑页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
@@ -330,10 +334,10 @@ public class WvDayCostSumController extends BaseController {
 		}
 		return new ModelAndView("com/zzjee/bm/wvDayCostSum-update");
 	}
-	
+
 	/**
 	 * 导入功能跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "upload")
@@ -341,10 +345,10 @@ public class WvDayCostSumController extends BaseController {
 		req.setAttribute("controller_name","wvDayCostSumController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
-	
+
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -363,7 +367,7 @@ public class WvDayCostSumController extends BaseController {
 	}
 	/**
 	 * 导出excel 使模板
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -377,13 +381,13 @@ public class WvDayCostSumController extends BaseController {
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxJson importExcel(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
-		
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -411,14 +415,14 @@ public class WvDayCostSumController extends BaseController {
 		}
 		return j;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public List<WvDayCostSumEntity> list() {
 		List<WvDayCostSumEntity> listWvDayCostSums=wvDayCostSumService.getList(WvDayCostSumEntity.class);
 		return listWvDayCostSums;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {

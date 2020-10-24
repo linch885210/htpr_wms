@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import com.zzjee.wmutil.wmUtil;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -71,12 +72,12 @@ import com.zzjee.bm.entity.MvCusCostEntity;
 import com.zzjee.bm.service.MvCusCostServiceI;
 import com.zzjee.md.entity.MdCusEntity;
 
-/**   
- * @Title: Controller  
+/**
+ * @Title: Controller
  * @Description: mv_cus_cost
  * @author erzhongxmu
  * @date 2017-10-19 12:23:14
- * @version V1.0   
+ * @version V1.0
  *
  */
 @Controller
@@ -93,12 +94,12 @@ public class MvCusCostController extends BaseController {
 	private SystemService systemService;
 	@Autowired
 	private Validator validator;
-	
+
 
 
 	/**
 	 * mv_cus_cost列表 页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "list")
@@ -108,7 +109,7 @@ public class MvCusCostController extends BaseController {
 
 	/**
 	 * easyui AJAX请求数据
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 * @param dataGrid
@@ -126,7 +127,9 @@ public class MvCusCostController extends BaseController {
 		//自定义追加查询条件
 //			cq.ge("costData",  DateUtils.str2Date("1990-01-01", DateUtils.date_sdf) );
 //			cq.le("costData", DateUtils.str2Date("2990-01-01", DateUtils.date_sdf) );
-
+			if(StringUtil.isNotEmpty(wmUtil.getCusCode())){
+				cq.eq("cusCode", wmUtil.getCusCode());
+			}
 		}catch (Exception e) {
 			throw new BusinessException(e.getMessage());
 		}
@@ -134,10 +137,10 @@ public class MvCusCostController extends BaseController {
 		this.mvCusCostService.getDataGridReturn(cq, true);
 		TagUtil.datagrid(response, dataGrid);
 	}
-	
+
 	/**
 	 * 删除mv_cus_cost
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "doDel")
@@ -158,8 +161,8 @@ public class MvCusCostController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
-	
+
+
 	@RequestMapping(params = "doPrint")
 	@ResponseBody
 	public void downReceiveExcelysd(MvCusCostEntity mvCusCost,HttpServletRequest request,HttpServletResponse response) {
@@ -171,7 +174,7 @@ public class MvCusCostController extends BaseController {
 		// 先把读进来的图片放到一个ByteArrayOutputStream中，以便产生ByteArray
 		try {
 //			codedFileName = java.net.URLEncoder.encode("中文", "UTF-8");
-			
+
 			String setHeaderEnddate =request.getParameter("enddate");
 			response.setHeader("content-disposition", "attachment;filename="
 					+ mvCusCost.getCusCode()+"("+request.getParameter("begindate")+" "+setHeaderEnddate+").xls");
@@ -214,13 +217,13 @@ public class MvCusCostController extends BaseController {
 
 			}
 
-            
-           
-            
-			sheet.setMargin(HSSFSheet.TopMargin,0.1);// 页边距（上）    
-			sheet.setMargin(HSSFSheet.BottomMargin,0.1);// 页边距（下）    
-			sheet.setMargin(HSSFSheet.LeftMargin,0.1);// 页边距（左）    
-			sheet.setMargin(HSSFSheet.RightMargin,0.05);// 页边距（右   
+
+
+
+			sheet.setMargin(HSSFSheet.TopMargin,0.1);// 页边距（上）
+			sheet.setMargin(HSSFSheet.BottomMargin,0.1);// 页边距（下）
+			sheet.setMargin(HSSFSheet.LeftMargin,0.1);// 页边距（左）
+			sheet.setMargin(HSSFSheet.RightMargin,0.05);// 页边距（右
 //			sheet.setDisplayGridlines(true);
 		     //set print grid lines or not
 //			sheet.setPrintGridlines(true);
@@ -271,7 +274,7 @@ public class MvCusCostController extends BaseController {
 						cs.setBorderTop(CellStyle.BORDER_NONE);
 						cs.setBorderBottom(CellStyle.BORDER_NONE);
 						cs.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-						
+
 						cs1.setFont(f2);
 						cs1.setBorderLeft(CellStyle.BORDER_NONE);
 						cs1.setBorderRight(CellStyle.BORDER_NONE);
@@ -310,7 +313,7 @@ public class MvCusCostController extends BaseController {
 						cs31.setBorderRight(CellStyle.BORDER_MEDIUM);
 						cs31.setBorderTop(CellStyle.BORDER_MEDIUM);
 						cs31.setBorderBottom(CellStyle.BORDER_NONE);
-						
+
 						CellStyle cs32 = wb.createCellStyle();
 						cs32.setFont(f2);
 						cs32.setBorderLeft(CellStyle.BORDER_MEDIUM);
@@ -318,7 +321,7 @@ public class MvCusCostController extends BaseController {
 						cs32.setBorderTop(CellStyle.BORDER_NONE);
 						cs32.setBorderBottom(CellStyle.BORDER_NONE);
 
-						
+
 						CellStyle cs32c = wb.createCellStyle();
 						cs32c.setFont(f2);
 						cs32c.setBorderLeft(CellStyle.BORDER_MEDIUM);
@@ -326,7 +329,7 @@ public class MvCusCostController extends BaseController {
 						cs32c.setBorderTop(CellStyle.BORDER_NONE);
 						cs32c.setBorderBottom(CellStyle.BORDER_NONE);
 						cs32c.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-						
+
 						CellStyle cs32r = wb.createCellStyle();
 						cs32r.setFont(f2);
 						cs32r.setBorderLeft(CellStyle.BORDER_MEDIUM);
@@ -334,8 +337,8 @@ public class MvCusCostController extends BaseController {
 						cs32r.setBorderTop(CellStyle.BORDER_NONE);
 						cs32r.setBorderBottom(CellStyle.BORDER_NONE);
 						cs32r.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-						
-						
+
+
 						CellStyle cs32ra = wb.createCellStyle();
 						cs32ra.setFont(f2);
 						cs32ra.setBorderLeft(CellStyle.BORDER_MEDIUM);
@@ -343,30 +346,30 @@ public class MvCusCostController extends BaseController {
 						cs32ra.setBorderTop(CellStyle.BORDER_MEDIUM);
 						cs32ra.setBorderBottom(CellStyle.BORDER_MEDIUM);
 						cs32ra.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-						
+
 						CellStyle cs33 = wb.createCellStyle();
 						cs33.setFont(f2);
 						cs33.setBorderLeft(CellStyle.BORDER_MEDIUM);
 						cs33.setBorderRight(CellStyle.BORDER_MEDIUM);
 						cs33.setBorderTop(CellStyle.BORDER_NONE);
 						cs33.setBorderBottom(CellStyle.BORDER_MEDIUM);
-						
-						
+
+
 						CellStyle cs34 = wb.createCellStyle();
 						cs34.setFont(f2);
 						cs34.setBorderLeft(CellStyle.BORDER_MEDIUM);
 						cs34.setBorderRight(CellStyle.BORDER_NONE);
 						cs34.setBorderTop(CellStyle.BORDER_NONE);
 						cs34.setBorderBottom(CellStyle.BORDER_NONE);
-						
+
 						CellStyle cs35 = wb.createCellStyle();
 						cs35.setFont(f2);
 						cs35.setBorderLeft(CellStyle.BORDER_NONE);
 						cs35.setBorderRight(CellStyle.BORDER_MEDIUM);
 						cs35.setBorderTop(CellStyle.BORDER_NONE);
 						cs35.setBorderBottom(CellStyle.BORDER_NONE);
-						
-						
+
+
 						CellStyle cs35c = wb.createCellStyle();
 						cs35c.setFont(f2);
 						cs35c.setBorderLeft(CellStyle.BORDER_NONE);
@@ -391,14 +394,14 @@ public class MvCusCostController extends BaseController {
 						cs36.setBorderRight(CellStyle.BORDER_NONE);
 						cs36.setBorderTop(CellStyle.BORDER_NONE);
 						cs36.setBorderBottom(CellStyle.BORDER_MEDIUM);
-						
+
 						CellStyle cs37 = wb.createCellStyle();
 						cs37.setFont(f2);
 						cs37.setBorderLeft(CellStyle.BORDER_NONE);
 						cs37.setBorderRight(CellStyle.BORDER_MEDIUM);
 						cs37.setBorderTop(CellStyle.BORDER_NONE);
 						cs37.setBorderBottom(CellStyle.BORDER_MEDIUM);
-						
+
 						cs4.setFont(f2);
 						cs4.setBorderTop(CellStyle.BORDER_MEDIUM);
 						cs4.setBorderBottom(CellStyle.BORDER_MEDIUM);
@@ -417,7 +420,7 @@ public class MvCusCostController extends BaseController {
 						cs51.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 
 						cs51.setWrapText(true);
-			
+
 						cs52.setFont(f5);
 						cs52.setBorderLeft(CellStyle.BORDER_NONE);
 						cs52.setBorderRight(CellStyle.BORDER_NONE);
@@ -430,10 +433,10 @@ public class MvCusCostController extends BaseController {
 						cs53.setBorderTop(CellStyle.BORDER_THIN);
 						cs53.setBorderBottom(CellStyle.BORDER_THIN);
 						cs53.setAlignment(HSSFCellStyle.ALIGN_RIGHT);
-						
+
 						cs52.setWrapText(true);
 						cs52.setRotation((short)255);
-						
+
 			int page = 0;
 			int cerconNo = 1;
 			String begindate = request.getParameter("begindate");
@@ -444,10 +447,10 @@ public class MvCusCostController extends BaseController {
 			if(StringUtil.isEmpty(enddate)){
 				enddate =  DateUtils.date2Str(DateUtils.date_sdf);
 			}
-			String tsql = "select 	wc.cus_code,    wc.cus_name,    wc.cost_code,    wc.cost_name, "    
+			String tsql = "select 	wc.cus_code,    wc.cus_name,    wc.cost_code,    wc.cost_name, "
 				   +" sum(wc.day_cost_yj) as yuanj,   (sum(wc.day_cost_bhs)- sum(wc.day_cost_yj)) as tiaozheng,    sum(wc.day_cost_bhs) as bhsj,"
 				   +"  sum(wc.day_cost_se) as shuie,     sum(wc.day_cost_hsj) as hansj, sum(wc.cost_sl) as costsl,wc.cost_unit "
-				   +" from		 wm_day_cost wc" 
+				   +" from		 wm_day_cost wc"
 				        +" where (wc.cost_js <> 'Y' or wc.cost_js is null) and  wc.day_cost_yj <> 0 and  wc.cus_code = ? and to_days(wc.cost_data) >= to_days(?) and to_days(wc.cost_data) <= to_days(?)"
 				   +"  group by wc.cus_code , wc.cus_name , wc.cost_code , wc.cost_name " ;
 			 if(request.getParameter("qj").equals("qj")){
@@ -513,15 +516,15 @@ public class MvCusCostController extends BaseController {
 			Cell cellTitle = row1.createCell(5);
 				cellTitle.setCellValue("对账单");
 			cellTitle.setCellStyle(cs);
-		
+
 			Row row2 = sheet.createRow((short) 2); // 第一行空白
-			
+
 			Row rowHead1 = sheet.createRow((short) 3); // 头部第一行
 			Cell cellHead1 = rowHead1.createCell(0);
 			rowHead1.setHeight((short) 300);
 			cellHead1.setCellValue("保管人" );
 			cellHead1.setCellStyle(cs31);
-			
+
 			Cell cellHead11 = rowHead1.createCell(1);
 			cellHead11.setCellStyle(cs31);
 			Cell cellHead12 = rowHead1.createCell(2);
@@ -530,7 +533,7 @@ public class MvCusCostController extends BaseController {
 			cellHead13.setCellStyle(cs31);
 			Cell cellHead14 = rowHead1.createCell(4);
 			cellHead14.setCellStyle(cs31);
-			
+
 			Cell cellHead2 = rowHead1.createCell(5);
 			cellHead2.setCellValue("存货人" );
 			cellHead2.setCellStyle(cs31);
@@ -542,46 +545,46 @@ public class MvCusCostController extends BaseController {
 			cellHead181.setCellStyle(cs31);
 			Cell cellHead19 = rowHead1.createCell(9);
 			cellHead19.setCellStyle(cs31);
-			
-			
+
+
 			Row rowHead4 = sheet.createRow((short) 4); // 头部第二行
 			Cell cellHead4 = rowHead4.createCell(0);
 			rowHead4.setHeight((short) 300);
 			cellHead4.setCellValue("公司名称: ");
 			cellHead4.setCellStyle(cs34);
-			
+
 			Cell cellHead42 = rowHead4.createCell(1);
 			cellHead42.setCellValue(ResourceUtil.getConfigByName("comfiname")  );
 			cellHead42.setCellStyle(cs2);
-			
-	
+
+
 			Cell cellHead149 = rowHead4.createCell(9);
 			cellHead149.setCellStyle(cs35);
-			
+
 			Cell cellHead43 = rowHead4.createCell(5);
 			cellHead43.setCellValue("公司名称:"  );
 			cellHead43.setCellStyle(cs34);
-			
+
 	        MdCusEntity md = systemService.findUniqueByProperty(MdCusEntity.class, "keHuBianMa", mvCusCost.getCusCode());
 			Cell cellHead44 = rowHead4.createCell(6);
 			cellHead44.setCellValue(md.getZhongWenQch() );
 			cellHead44.setCellStyle(cs35);
-			
-			
+
+
 			Row rowHead5 = sheet.createRow((short) 5); // 头部第二行
 			Cell cellHead5 = rowHead5.createCell(0);
 			rowHead5.setHeight((short) 300);
 			cellHead5.setCellValue("公司地址: ");
 			cellHead5.setCellStyle(cs34);
-			
+
 			Cell cellHead52 = rowHead5.createCell(1);
 			cellHead52.setCellValue(ResourceUtil.getConfigByName("comfiaddr")   );
 			cellHead52.setCellStyle(cs2);
-			
+
 			Cell cellHead53 = rowHead5.createCell(5);
 			cellHead53.setCellValue("公司地址:"  );
 			cellHead53.setCellStyle(cs34);
-			
+
 			Cell cellHead55 = rowHead5.createCell(6);
 			cellHead55.setCellValue(md.getDiZhi() );
 			cellHead55.setCellStyle(cs35);
@@ -592,15 +595,15 @@ public class MvCusCostController extends BaseController {
 			Cell cellHead6 = rowHead6.createCell(0);
 			cellHead6.setCellValue("联系电话:");
 			cellHead6.setCellStyle(cs34);
-			
+
 			Cell cellHead62 = rowHead6.createCell(1);
 			cellHead62.setCellValue(ResourceUtil.getConfigByName("comfitel")   );
 			cellHead62.setCellStyle(cs2);
-			
+
 			Cell cellHead63 = rowHead6.createCell(5);
 			cellHead63.setCellValue("联系电话:"  );
 			cellHead63.setCellStyle(cs34);
-			
+
 			Cell cellHead66 = rowHead6.createCell(6);
 			cellHead66.setCellValue(md.getShouJi() );
 			cellHead66.setCellStyle(cs35);
@@ -612,78 +615,78 @@ public class MvCusCostController extends BaseController {
 			Cell cellHead7 = rowHead7.createCell(0);
 			cellHead7.setCellValue("收款账号: ");
 			cellHead7.setCellStyle(cs34);
-			
+
 			Cell cellHead72 = rowHead7.createCell(1);
 			cellHead72.setCellValue(ResourceUtil.getConfigByName("comfibankid")    );
 			cellHead72.setCellStyle(cs2);
-			
+
 			Cell cellHead73 = rowHead7.createCell(5);
 			cellHead73.setCellValue("注册号:"  );
 			cellHead73.setCellStyle(cs34);
-			
+
 			Cell cellHead76 = rowHead7.createCell(6);
 			cellHead76.setCellValue(md.getYingYeZhiZhao());
 			cellHead76.setCellStyle(cs35);
-			
-			
+
+
 			Cell cellHead179 = rowHead7.createCell(9);
 			cellHead179.setCellStyle(cs35);
-			
+
 			Row rowHead8 = sheet.createRow((short) 8); // 头部第二行
 			rowHead8.setHeight((short) 300);
 			Cell cellHead8 = rowHead8.createCell(0);
 			cellHead8.setCellValue("开户行:");
 			cellHead8.setCellStyle(cs34);
-			
+
 			Cell cellHead82 = rowHead8.createCell(1);
 			cellHead82.setCellValue(ResourceUtil.getConfigByName("comfibankname")   );
 			cellHead82.setCellStyle(cs2);
-			
+
 			Cell cellHead83 = rowHead8.createCell(5);
 			cellHead83.setCellValue("账户号码:"  );
 			cellHead83.setCellStyle(cs34);
-			
+
 			Cell cellHead86 = rowHead8.createCell(6);
 			cellHead86.setCellValue("" );
 			cellHead86.setCellStyle(cs35);
-			
+
 			Cell cellHead189 = rowHead8.createCell(9);
 			cellHead189.setCellStyle(cs35);
-			
+
 			Row rowHead9 = sheet.createRow((short) 9); // 头部第二行
 			rowHead9.setHeight((short) 300);
 			Cell cellHead9 = rowHead9.createCell(0);
 			cellHead9.setCellValue("注册号: ");
 			cellHead9.setCellStyle(cs36);
-			
+
 			Cell cellHead92 = rowHead9.createCell(1);
 			cellHead92.setCellValue(ResourceUtil.getConfigByName("comfizhucehao") );
 			cellHead92.setCellStyle(cs37);
-			
-			
+
+
 			Cell cellHead199 = rowHead9.createCell(2);
 			cellHead199.setCellStyle(cs37);
 			Cell cellHead1993 = rowHead9.createCell(3);
 			cellHead1993.setCellStyle(cs37);
 			Cell cellHead1994 = rowHead9.createCell(4);
 			cellHead1994.setCellStyle(cs37);
-			
+
 			Cell cellHead93 = rowHead9.createCell(5);
 			cellHead93.setCellValue("账单日期:"  );
 			cellHead93.setCellStyle(cs36);
-			
+
 			Cell cellHead96 = rowHead9.createCell(6);
 			cellHead96.setCellValue(DateUtils.date2Str(DateUtils.getDate(), DateUtils.date_sdf) );
 			cellHead96.setCellStyle(cs37);
-			
+
 			Cell cellHead197 = rowHead9.createCell(7);
 			cellHead197.setCellStyle(cs37);
 			Cell cellHead1998 = rowHead9.createCell(8);
 			cellHead1998.setCellStyle(cs37);
 			Cell cellHead1999 = rowHead9.createCell(9);
 			cellHead1999.setCellStyle(cs37);
-			
-			
+
+
 
 			// 合并单元格
 			CellRangeAddress c = new CellRangeAddress(0, 0, 0, 9); // 第一行空白
@@ -692,7 +695,7 @@ public class MvCusCostController extends BaseController {
 			CellRangeAddress c2 = new CellRangeAddress(2, 2, 0, 9);// 第三行地址
 			CellRangeAddress c3 = new CellRangeAddress(3, 3, 0, 4);// 第四行电话
 			CellRangeAddress c32 = new CellRangeAddress(3, 3, 5, 9);// 第四行电话
-			
+
 			CellRangeAddress c4 = new CellRangeAddress(4, 4, 1, 4);// 第5行 到货日期
 			CellRangeAddress c42 = new CellRangeAddress(4, 4, 6, 9);// 第5行预约单号
 			CellRangeAddress c5 = new CellRangeAddress(5, 5, 1, 4);// 第6行客户采购单号
@@ -717,21 +720,21 @@ public class MvCusCostController extends BaseController {
 			sheet.addMergedRegion(c7);
 			sheet.addMergedRegion(c8);
 			sheet.addMergedRegion(c9);
-			
+
 			sheet.addMergedRegion(c42);
 			sheet.addMergedRegion(c52);
 			sheet.addMergedRegion(c62);
 			sheet.addMergedRegion(c72);
 			sheet.addMergedRegion(c82);
 			sheet.addMergedRegion(c92);
-			
-			
+
+
 			Row row12 = sheet.createRow((short) 10); // 第一行空白
 			row12.setHeight((short) 300);
 			Row row13 = sheet.createRow((short) 11); // 第一行空白
 			row13.setHeight((short) 300);
 			Row rowColumnName = sheet.createRow((short) 12); // 列名
-			
+
 			String[] columnNames = { "结算期间", "上期末付款", "本期合计", "累计应付款", "结清日期" };
 
 			String[] columnNamessum = { "计费日期", "入库数量", "入库单位", "入库操作费", "出库数量", "出库单位", "出库操作费","每日库存", "单位", "每日仓租",  };
@@ -986,7 +989,7 @@ public class MvCusCostController extends BaseController {
 					cell4.setCellStyle(cs3);
 				}
 			}
-			
+
 			CellRangeAddress c141 = new CellRangeAddress(12, 12, 0, 2);// 第5行 到货日期
 			CellRangeAddress c142 = new CellRangeAddress(12, 12, 3, 4);// 第5行预约单号
 			CellRangeAddress c143 = new CellRangeAddress(12, 12, 5, 6);// 第6行客户采购单号
@@ -997,8 +1000,8 @@ public class MvCusCostController extends BaseController {
 			CellRangeAddress c153 = new CellRangeAddress(13, 13, 5, 6);// 第7行车号
 			CellRangeAddress c154 = new CellRangeAddress(13, 13, 7, 8);// 第7行客户名称
 			CellRangeAddress c155 = new CellRangeAddress(13, 13, 9, 9);// 第7行车号
-			
-			
+
+
 			sheet.addMergedRegion(c141);
 			sheet.addMergedRegion(c142);
 			sheet.addMergedRegion(c143);
@@ -1008,8 +1011,8 @@ public class MvCusCostController extends BaseController {
 			sheet.addMergedRegion(c152);
 			sheet.addMergedRegion(c153);
 			sheet.addMergedRegion(c154);
-			sheet.addMergedRegion(c155);	
-			
+			sheet.addMergedRegion(c155);
+
 			Row row16 = sheet.createRow((short) 14); // 第一行空白
 			row16.setHeight((short) 300);
 			Row row17 = sheet.createRow((short) 15); // 第一行空白
@@ -1019,11 +1022,11 @@ public class MvCusCostController extends BaseController {
 			Cell cellHead18 = rowHead18.createCell(0);
 			cellHead18.setCellValue("序号 ");
 			cellHead18.setCellStyle(cs3);
-			
+
 			Cell cellHead182 = rowHead18.createCell(1);
 			cellHead182.setCellValue("费用说明"  );
 			cellHead182.setCellStyle(cs3);
-			
+
 			Cell cellHead1822 = rowHead18.createCell(2);
 			cellHead1822.setCellValue(""  );
 			cellHead1822.setCellStyle(cs3);
@@ -1033,17 +1036,17 @@ public class MvCusCostController extends BaseController {
 			Cell cellHead1824 = rowHead18.createCell(4);
 			cellHead1824.setCellValue(""  );
 			cellHead1824.setCellStyle(cs3);
-			
-			
-			
+
+
+
 			Cell cellHead183 = rowHead18.createCell(5);
 			cellHead183.setCellValue("调整"  );
 			cellHead183.setCellStyle(cs3);
-			
+
 			Cell cellHead186 = rowHead18.createCell(6);
 			cellHead186.setCellValue("金额" );
 			cellHead186.setCellStyle(cs3);
-			
+
 			Cell cellHead1827 = rowHead18.createCell(7);
 			cellHead1827.setCellValue(""  );
 			cellHead1827.setCellStyle(cs3);
@@ -1053,27 +1056,27 @@ public class MvCusCostController extends BaseController {
 			Cell cellHead1829 = rowHead18.createCell(9);
 			cellHead1829.setCellValue(""  );
 			cellHead1829.setCellStyle(cs3);
-			
+
 			CellRangeAddress c182 = new CellRangeAddress(16, 16, 1, 4);// 第7行客户名称
 			CellRangeAddress c183 = new CellRangeAddress(16, 16, 6, 9);// 第7行车号
 			sheet.addMergedRegion(c182);
 			sheet.addMergedRegion(c183);
-			
+
 			int cellsNum = 16;
 			Double sumyuanj =   0.00;
-			Double tiaozheng =    0.00; 
+			Double tiaozheng =    0.00;
 
 			Double sumbhsj =   0.00;
-			Double sumshuie =    0.00; 
+			Double sumshuie =    0.00;
 			Double sumhansj =   0.00;
 			DecimalFormat df=new DecimalFormat(".##");
 
 			for (int i = 0; i < result.size(); i++) {
-         		
+
 				cellsNum++;
 				Row rowColumnValue = sheet.createRow((short) cellsNum); // 列名
 				rowColumnValue.setHeight((short) 300);
-				
+
 						Cell cell1 = rowColumnValue.createCell(0);
 						cell1.setCellValue(cerconNo);
 						cell1.setCellStyle(cs32c);
@@ -1095,19 +1098,19 @@ public class MvCusCostController extends BaseController {
 						}
 
 //						cell2.setCellStyle(cs5);
-						
-						
+
+
 //						Cell cell22 = rowColumnValue.createCell(2);
 //						cell22.setCellValue("");
 //						cell22.setCellStyle(cs5);
-//						
+//
 //						Cell cell23 = rowColumnValue.createCell(3);
 //						cell23.setCellValue("");
 //						cell23.setCellStyle(cs5);
-//						
+//
 						Cell cell24 = rowColumnValue.createCell(4);
 							cell24.setCellStyle(cs35);
-						
+
 						CellRangeAddress c192 = new CellRangeAddress(cellsNum, cellsNum, 1, 4);// 第7行客户名称
 						sheet.addMergedRegion(c192);
                         try {
@@ -1117,16 +1120,16 @@ public class MvCusCostController extends BaseController {
     						tiaozheng = tiaozheng + doublet;
     						cell4.setCellValue(df.format(doublet));
     						cell4.setCellStyle(cs35c);
-    					
+
 						} catch (Exception e) {
 							// TODO: handle exception
-						
+
 						}
-                        
+
 					 try {
 							Cell cell5 = rowColumnValue.createCell(6);// 温度
-					
-							cell5.setCellStyle(cs35c);	
+
+							cell5.setCellStyle(cs35c);
 							Double doublet = Double.parseDouble(result.get(i)
 									.get("bhsj").toString());
 							cell5.setCellValue(df.format(doublet));
@@ -1139,12 +1142,12 @@ public class MvCusCostController extends BaseController {
 //						Cell cell48 = rowColumnValue.createCell(8);// 生产日期
 //
 //						cell48.setCellStyle(cs53);
-//						
+//
 						Cell cell49 = rowColumnValue.createCell(9);// 生产日期
 
 						cell49.setCellStyle(cs35c);
-					 
-					 
+
+
 						CellRangeAddress c193 = new CellRangeAddress(cellsNum, cellsNum, 6, 9);// 第7行车号
 						sheet.addMergedRegion(c193);
 
@@ -1169,9 +1172,9 @@ public class MvCusCostController extends BaseController {
 						} catch (Exception e) {
 							// TODO: handle exception
 						}
-			
 
-					
+
+
 				cerconNo++;
 			}
 			 cellsNum++;
@@ -1197,13 +1200,13 @@ public class MvCusCostController extends BaseController {
 				cellb7.setCellStyle(cs33);
 				cellb8.setCellStyle(cs33);
 				cellb9.setCellStyle(cs33);
-				
-				
+
+
 				CellRangeAddress c1954 = new CellRangeAddress(cellsNum, cellsNum, 1, 4);// 第7行车号
 				sheet.addMergedRegion(c1954);
 				CellRangeAddress c1959 = new CellRangeAddress(cellsNum, cellsNum, 6, 9);// 第7行车号
 				sheet.addMergedRegion(c1959);
-				
+
             	 cellsNum++;
  				Row rowColumnValue = sheet.createRow((short) cellsNum); // 列名
  				rowColumnValue.setHeight((short) 300);
@@ -1213,9 +1216,9 @@ public class MvCusCostController extends BaseController {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
- 	
+
  				cell3.setCellStyle(cs32r);
- 				
+
  				Cell cell4 = rowColumnValue.createCell(6);// 重量
  				try {
  					cell4.setCellValue(df.format(sumbhsj));
@@ -1223,24 +1226,24 @@ public class MvCusCostController extends BaseController {
 					// TODO: handle exception
 				}
  				cell4.setCellStyle(cs32r);
- 				
+
 				Cell cell47 = rowColumnValue.createCell(7);// 生产日期
 
 				cell47.setCellStyle(cs32r);
 				Cell cell48 = rowColumnValue.createCell(8);// 生产日期
 
 				cell48.setCellStyle(cs32r);
-				
+
 				Cell cell49 = rowColumnValue.createCell(9);// 生产日期
 
 				cell49.setCellStyle(cs32r);
- 				
- 				
- 				
+
+
+
  				CellRangeAddress c193 = new CellRangeAddress(cellsNum, cellsNum, 6, 9);// 第7行车号
 				sheet.addMergedRegion(c193);
-				
-				
+
+
 				cellsNum++;
  				Row rowColumnValuew = sheet.createRow((short) cellsNum); // 列名
  				rowColumnValuew.setHeight((short) 300);
@@ -1250,7 +1253,7 @@ public class MvCusCostController extends BaseController {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
- 			
+
  				cell5.setCellStyle(cs32r);
  				Cell cell6 = rowColumnValuew.createCell(6);// 重量
  				try {
@@ -1259,21 +1262,21 @@ public class MvCusCostController extends BaseController {
 					// TODO: handle exception
 				}
  				cell6.setCellStyle(cs32r);
- 				
+
 				Cell cell471 = rowColumnValuew.createCell(7);// 生产日期
 
 				cell471.setCellStyle(cs32r);
 				Cell cell481 = rowColumnValuew.createCell(8);// 生产日期
 
 				cell481.setCellStyle(cs32r);
-				
+
 				Cell cell491 = rowColumnValuew.createCell(9);// 生产日期
 
 				cell491.setCellStyle(cs32r);
- 				
+
  				CellRangeAddress c194 = new CellRangeAddress(cellsNum, cellsNum, 6, 9);// 第7行车号
 				sheet.addMergedRegion(c194);
-				
+
  				cellsNum++;
  				Row rowColumnValuew1 = sheet.createRow((short) cellsNum); // 列名
  				rowColumnValuew1.setHeight((short) 300);
@@ -1283,7 +1286,7 @@ public class MvCusCostController extends BaseController {
 				} catch (Exception e) {
 					// TODO: handle exception
 				}
- 			
+
  				cell51.setCellStyle(cs32ra);
  				Cell cell61 = rowColumnValuew1.createCell(6);// 重量
  				try {
@@ -1292,28 +1295,28 @@ public class MvCusCostController extends BaseController {
 					// TODO: handle exception
 				}
  				cell61.setCellStyle(cs32ra);
- 				
+
  				Cell cell4711 = rowColumnValuew1.createCell(7);// 生产日期
 
 				cell4711.setCellStyle(cs32ra);
 				Cell cell4811 = rowColumnValuew1.createCell(8);// 生产日期
 
 				cell4811.setCellStyle(cs32ra);
-				
+
 				Cell cell4911 = rowColumnValuew1.createCell(9);// 生产日期
 
 				cell4911.setCellStyle(cs32ra);
- 				
+
  				CellRangeAddress c195 = new CellRangeAddress(cellsNum, cellsNum, 6, 9);// 第7行车号
 				sheet.addMergedRegion(c195);
-				
-				
-				
+
+
+
 				Row row161 = sheet.createRow((short) 1 + cellsNum); // 第一行空白
 				row161.setHeight((short) 300);
 				Row row171 = sheet.createRow((short) 2 + cellsNum); // 第一行空白
 				row171.setHeight((short) 300);
-				
+
 			Row rowColumnInfo = sheet.createRow((short) 3 + cellsNum); // 列名
 			rowColumnInfo.setHeight((short) 300);
 			Cell cell49111 =  rowColumnInfo.createCell(0);
@@ -1322,19 +1325,19 @@ public class MvCusCostController extends BaseController {
 			cell49111.setCellStyle(cs31);
 			Cell cell491111 =  rowColumnInfo.createCell(1);
 			cell491111.setCellStyle(cs31);
-			
+
 			Cell cell491112 =  rowColumnInfo.createCell(2);
 			cell491112.setCellStyle(cs31);
-			
+
 			Cell cell491113 =  rowColumnInfo.createCell(3);
 			cell491113.setCellStyle(cs31);
-			
+
 			Cell cell491114 =  rowColumnInfo.createCell(4);
 			cell491114.setCellStyle(cs31);
-			
+
 			Cell cell491115 =  rowColumnInfo.createCell(5);
 			cell491115.setCellStyle(cs31);
-			
+
 			Cell cell491116 =  rowColumnInfo.createCell(6);
 			cell491116.setCellStyle(cs31);
 			Cell cell491117 =  rowColumnInfo.createCell(7);
@@ -1343,12 +1346,12 @@ public class MvCusCostController extends BaseController {
 			cell491118.setCellStyle(cs31);
 			Cell cell491119 =  rowColumnInfo.createCell(9);
 			cell491119.setCellStyle(cs31);
-			
-			
+
+
 			CellRangeAddress c16 = new CellRangeAddress(3 + cellsNum,
 					3 + cellsNum, 0, 9);
 			sheet.addMergedRegion(c16);
-   	
+
 			Row rowColumnInfo2 = sheet.createRow((short) 4 + cellsNum); // 列名
 			rowColumnInfo2.setHeight((short) 300);
 			Cell cell49112 = rowColumnInfo2.createCell(0);
@@ -1360,7 +1363,7 @@ public class MvCusCostController extends BaseController {
 			CellRangeAddress c162 = new CellRangeAddress(4 + cellsNum,
 					4 + cellsNum, 0, 9);
 			sheet.addMergedRegion(c162);
-			
+
 			Row rowColumnInfo3 = sheet.createRow((short) 5 + cellsNum); // 列名
 			rowColumnInfo3.setHeight((short) 300);
 			Cell cell49113 = rowColumnInfo3.createCell(0);
@@ -1372,41 +1375,41 @@ public class MvCusCostController extends BaseController {
 					5 + cellsNum, 0, 9);
 			 cell49113.setCellStyle(cs32);
 			sheet.addMergedRegion(c163);
-			
+
 			Row rowColumnInfo4 = sheet.createRow((short) 6 + cellsNum); // 列名
 			rowColumnInfo4.setHeight((short) 700);
 			Cell cell49114 = rowColumnInfo4.createCell(0);
 			cell49114.setCellValue(ResourceUtil.getConfigByName("comfibeizhu3")
 					);
 			cell49114.setCellStyle(cs33);
-			
+
 			Cell cell49134 = rowColumnInfo4.createCell(1);
 			cell49134.setCellStyle(cs33);
-			
+
 			Cell cell491342 = rowColumnInfo4.createCell(2);
 			cell491342.setCellStyle(cs33);
-			
+
 			Cell cell491343 = rowColumnInfo4.createCell(3);
 			cell491343.setCellStyle(cs33);
-			
+
 			Cell cell491344 = rowColumnInfo4.createCell(4);
 			cell491344.setCellStyle(cs33);
-			
+
 			Cell cell491345 = rowColumnInfo4.createCell(5);
 			cell491345.setCellStyle(cs33);
-			
+
 			Cell cell491346 = rowColumnInfo4.createCell(6);
 			cell491346.setCellStyle(cs33);
-			
+
 			Cell cell491347 = rowColumnInfo4.createCell(7);
 			cell491347.setCellStyle(cs33);
-			
+
 			Cell cell491348 = rowColumnInfo4.createCell(8);
 			cell491348.setCellStyle(cs33);
-			
+
 			Cell cell491349 = rowColumnInfo4.createCell(9);
 			cell491349.setCellStyle(cs33);
-			
+
 			CellRangeAddress c164 = new CellRangeAddress(6 + cellsNum,
 					6 + cellsNum, 0, 9);
 			sheet.addMergedRegion(c164);
@@ -1426,7 +1429,7 @@ public class MvCusCostController extends BaseController {
 			}
 
 			fileOut = response.getOutputStream();
-			 HSSFPrintSetup printSetup = sheet.getPrintSetup();   
+			 HSSFPrintSetup printSetup = sheet.getPrintSetup();
 			 printSetup.setPaperSize(HSSFPrintSetup.A4_PAPERSIZE);
 			wb.write(fileOut);
 		} catch (Exception e) {
@@ -1441,10 +1444,10 @@ public class MvCusCostController extends BaseController {
 			}
 		}
 	}
-	
+
 	/**
 	 * 批量删除mv_cus_cost
-	 * 
+	 *
 	 * @return
 	 */
 	 @RequestMapping(params = "doBatchDel")
@@ -1455,7 +1458,7 @@ public class MvCusCostController extends BaseController {
 		message = "删除成功";
 		try{
 			for(String id:ids.split(",")){
-				MvCusCostEntity mvCusCost = systemService.getEntity(MvCusCostEntity.class, 
+				MvCusCostEntity mvCusCost = systemService.getEntity(MvCusCostEntity.class,
 				id
 				);
 				mvCusCostService.delete(mvCusCost);
@@ -1473,7 +1476,7 @@ public class MvCusCostController extends BaseController {
 
 	/**
 	 * 添加mv_cus_cost
-	 * 
+	 *
 
 	 * @return
 	 */
@@ -1494,10 +1497,10 @@ public class MvCusCostController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 	/**
 	 * 更新mv_cus_cost
-	 * 
+	 *
 
 	 * @return
 	 */
@@ -1520,11 +1523,11 @@ public class MvCusCostController extends BaseController {
 		j.setMsg(message);
 		return j;
 	}
-	
+
 
 	/**
 	 * mv_cus_cost新增页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goAdd")
@@ -1537,7 +1540,7 @@ public class MvCusCostController extends BaseController {
 	}
 	/**
 	 * mv_cus_cost编辑页面跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "goUpdate")
@@ -1548,10 +1551,10 @@ public class MvCusCostController extends BaseController {
 		}
 		return new ModelAndView("com/zzjee/bm/mvCusCost-update");
 	}
-	
+
 	/**
 	 * 导入功能跳转
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(params = "upload")
@@ -1559,10 +1562,10 @@ public class MvCusCostController extends BaseController {
 		req.setAttribute("controller_name","mvCusCostController");
 		return new ModelAndView("common/upload/pub_excel_upload");
 	}
-	
+
 	/**
 	 * 导出excel
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -1581,7 +1584,7 @@ public class MvCusCostController extends BaseController {
 	}
 	/**
 	 * 导出excel 使模板
-	 * 
+	 *
 	 * @param request
 	 * @param response
 	 */
@@ -1595,13 +1598,13 @@ public class MvCusCostController extends BaseController {
     	modelMap.put(NormalExcelConstants.DATA_LIST,new ArrayList());
     	return NormalExcelConstants.JEECG_EXCEL_VIEW;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@RequestMapping(params = "importExcel", method = RequestMethod.POST)
 	@ResponseBody
 	public AjaxJson importExcel(HttpServletRequest request, HttpServletResponse response) {
 		AjaxJson j = new AjaxJson();
-		
+
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
 		for (Map.Entry<String, MultipartFile> entity : fileMap.entrySet()) {
@@ -1629,14 +1632,14 @@ public class MvCusCostController extends BaseController {
 		}
 		return j;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public List<MvCusCostEntity> list() {
 		List<MvCusCostEntity> listMvCusCosts=mvCusCostService.getList(MvCusCostEntity.class);
 		return listMvCusCosts;
 	}
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") String id) {
