@@ -2676,6 +2676,8 @@ public class WmOmNoticeHController extends BaseController {
 		}
 //		listWaveToDowns = wmOmNoticeHService.findHql(hql);
 		D0.setObj(listWaveToDowns);
+		System.out.println("/list/hehuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
+
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/listdetail/hehuo",  method = RequestMethod.GET)//
@@ -2693,6 +2695,8 @@ public class WmOmNoticeHController extends BaseController {
 //			listWaveToDowns = wmOmNoticeHService.findHql(hql);
 			listWaveToDowns = wmOmNoticeHService.findHql(hql, omnoticeid);
 		D0.setObj(listWaveToDowns);
+		System.out.println("/listdetail/hehuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
+
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/update/hehuo",  method = RequestMethod.GET)

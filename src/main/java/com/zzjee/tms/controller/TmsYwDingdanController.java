@@ -540,6 +540,7 @@ public class TmsYwDingdanController extends BaseController {
 
 		}
 		D0.setObj(listWaveToDowns);
+		System.out.println("/list/songhuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
 
@@ -553,7 +554,9 @@ public class TmsYwDingdanController extends BaseController {
         List<WmTmsNoticeIEntity> listWaveToDowns =new ArrayList<>();
         listWaveToDowns = wmOmNoticeHService.findHql(hql,omnoticeid);
         D0.setObj(listWaveToDowns);
-        return new ResponseEntity(D0, HttpStatus.OK);
+		System.out.println("/listdetail/songhuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
+
+		return new ResponseEntity(D0, HttpStatus.OK);
     }
 
 
