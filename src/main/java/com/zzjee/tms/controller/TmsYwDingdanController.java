@@ -553,7 +553,9 @@ public class TmsYwDingdanController extends BaseController {
                                   @RequestParam(value="omnoticeid", required=false)String omnoticeid) {
         ResultDO D0 = new  ResultDO();
         D0.setOK(true);
-        String hql="from WmTmsNoticeIEntity  where omNoticeId = ?";
+		System.out.println("/list/omNoticeId"+omnoticeid );
+
+		String hql="from WmTmsNoticeIEntity  where omNoticeId = ?";
         List<WmTmsNoticeIEntity> listWaveToDowns =new ArrayList<>();
         listWaveToDowns = wmOmNoticeHService.findHql(hql,omnoticeid);
         D0.setObj(listWaveToDowns);

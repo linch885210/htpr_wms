@@ -2666,6 +2666,7 @@ public class WmOmNoticeHController extends BaseController {
 		String hql="from WmOmNoticeHEntity  ";
 
 		List<WmOmNoticeHEntity> listWaveToDowns =new ArrayList<>();
+		List<WmOmNoticeHEntity> listWaveToDownsnew =new ArrayList<>();
 		if(StringUtil.isNotEmpty(searchstr)&&!"null".equals(searchstr)){
 			hql="from WmOmNoticeHEntity where  omSta <> ? and  reMember = ? and  omNoticeId = ?";
 			listWaveToDowns = wmOmNoticeHService.findHql(hql,"复核完成",username,searchstr);
@@ -2678,14 +2679,35 @@ public class WmOmNoticeHController extends BaseController {
 		D0.setObj(listWaveToDowns);
 		System.out.println("/list/hehuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
 
+		for(WmOmNoticeHEntity t: listWaveToDowns){
+			List<WmOmNoticeIEntity> listWaveToDowndetial =new ArrayList<>();
+			hql="from WmOmNoticeIEntity where   omNoticeId = ?";
+			listWaveToDowndetial = wmOmNoticeHService.findHql(hql, t.getOmNoticeId());
+			try{
+				double sumcount =0.00;
+				for(WmOmNoticeIEntity dt: listWaveToDowndetial){
+					sumcount = sumcount + Double.parseDouble(dt.getBaseGoodscount());
+				}
+
+				t.setOmBeizhu(Double.toString(sumcount));
+			}catch (Exception e){
+
+			}
+
+			listWaveToDownsnew.add(t);
+		}
+
+
 		return new ResponseEntity(D0, HttpStatus.OK);
 	}
 	@RequestMapping(value = "/listdetail/hehuo",  method = RequestMethod.GET)//
 	@ResponseBody
 	public ResponseEntity<?> listdetail(
-								  @RequestParam(value="omNoticeId", required=false)String omnoticeid) {
+								  @RequestParam(value="omnoticeid", required=false)String omnoticeid) {
 		ResultDO D0 = new  ResultDO();
 		D0.setOK(true);
+		System.out.println("/list/hehuo/omNoticeId"+omnoticeid );
+
 		String hql="from WmOmNoticeIEntity where omNoticeId = ? ";
 		List<WmOmNoticeIEntity> listWaveToDowns =new ArrayList<>();
 //			hql="from WmImNoticeIEntity where  noticeiSta <> ? and  omNoticeId = ?";
