@@ -2666,7 +2666,7 @@ public class WmOmNoticeHController extends BaseController {
 		String hql="from WmOmNoticeHEntity  ";
 
 		List<WmOmNoticeHEntity> listWaveToDowns =new ArrayList<>();
-		if(StringUtil.isNotEmpty(searchstr)){
+		if(StringUtil.isNotEmpty(searchstr)&&!"null".equals(searchstr)){
 			hql="from WmOmNoticeHEntity where  omSta <> ? and  reMember = ? and  omNoticeId = ?";
 			listWaveToDowns = wmOmNoticeHService.findHql(hql,"复核完成",username,searchstr);
 		}else{

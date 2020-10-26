@@ -530,8 +530,11 @@ public class TmsYwDingdanController extends BaseController {
 		ResultDO D0 = new  ResultDO();
 		D0.setOK(true);
 		String hql="from WmTmsNoticeHEntity  ";
+		System.out.println("/list/username"+username );
+		System.out.println("/list/searchstr"+searchstr );
+
 		List<WmTmsNoticeHEntity> listWaveToDowns =new ArrayList<>();
-		if(StringUtil.isNotEmpty(searchstr)){
+		if(StringUtil.isNotEmpty(searchstr)&&!"null".equals(searchstr)){
 			hql="from WmTmsNoticeHEntity where  omSta <> ? and  reMember = ? and  omNoticeId = ?";
 			listWaveToDowns = wmOmNoticeHService.findHql(hql,"已送货",username,searchstr);
 		}else{
