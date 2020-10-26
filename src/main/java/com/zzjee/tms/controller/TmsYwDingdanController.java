@@ -535,8 +535,8 @@ public class TmsYwDingdanController extends BaseController {
 
 		List<WmTmsNoticeHEntity> listWaveToDowns =new ArrayList<>();
 		if(StringUtil.isNotEmpty(searchstr)&&!"null".equals(searchstr)){
-			hql="from WmTmsNoticeHEntity where  omSta <> ? and  reMember = ? and  omNoticeId = ?";
-			listWaveToDowns = wmOmNoticeHService.findHql(hql,"已送货",username,searchstr);
+			hql="from WmTmsNoticeHEntity where  omSta <> ? and  reMember = ? and  delvMobile like ?";
+			listWaveToDowns = wmOmNoticeHService.findHql(hql,"已送货",username,"%"+searchstr+"%");
 		}else{
 			hql="from WmTmsNoticeHEntity where omSta <> ? and reMember = ? ";
 			listWaveToDowns = wmOmNoticeHService.findHql(hql,"已送货",username);
@@ -559,7 +559,12 @@ public class TmsYwDingdanController extends BaseController {
         List<WmTmsNoticeIEntity> listWaveToDowns =new ArrayList<>();
         listWaveToDowns = wmOmNoticeHService.findHql(hql,omnoticeid);
         D0.setObj(listWaveToDowns);
-		System.out.println("/listdetail/songhuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
+        try{
+			System.out.println("/listdetail/songhuolistWaveToDowns==="+listWaveToDowns.get(0).toString()+listWaveToDowns.size());
+
+		}catch (Exception e){
+
+		}
 
 		return new ResponseEntity(D0, HttpStatus.OK);
     }
