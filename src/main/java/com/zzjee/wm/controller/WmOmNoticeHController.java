@@ -2676,7 +2676,6 @@ public class WmOmNoticeHController extends BaseController {
 
 		}
 //		listWaveToDowns = wmOmNoticeHService.findHql(hql);
-		D0.setObj(listWaveToDowns);
 		System.out.println("/list/hehuolistWaveToDowns==="+listWaveToDowns.toString()+listWaveToDowns.size());
 
 		for(WmOmNoticeHEntity t: listWaveToDowns){
@@ -2696,6 +2695,7 @@ public class WmOmNoticeHController extends BaseController {
 
 			listWaveToDownsnew.add(t);
 		}
+		D0.setObj(listWaveToDownsnew);
 
 
 		return new ResponseEntity(D0, HttpStatus.OK);
